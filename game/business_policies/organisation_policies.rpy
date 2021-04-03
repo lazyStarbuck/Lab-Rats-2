@@ -67,7 +67,7 @@ init 0 python:
         return True
 
     public_advertising_license_policy = Policy(name = "Public Advertising License",
-        desc = "After filling out the proper paperwork and familiarizing yourself with publishing regultions you will be ready to advertise your product in print publications. Allows you to pick a girl as your company model and launch ad campaigns.",
+        desc = "After filling out the proper paperwork and familiarizing yourself with publishing regulations you will be ready to advertise your product in print publications. Allows you to pick a girl as your company model and launch ad campaigns.",
         cost = 2500,
         toggleable = False,
         requirement = public_advertising_license_requirement)
@@ -122,7 +122,7 @@ init 0 python:
 
     def draconian_enforcement_on_day():
         for employee in mc.business.get_employee_list():
-            employee.change_happiness(-5)
+            employee.change_happiness(-5, add_to_log = False)
 
     draconian_enforcement = Policy(name = "Draconian Enforcement",
         desc = "Each policy infraction is to be punished to the utmost tolerable. All infraction severities are increased by one, but the restrictive office environment affects company morale, lowering all empolyee happiness by -5 per day.",

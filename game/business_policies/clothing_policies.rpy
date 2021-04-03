@@ -4,11 +4,9 @@ init 0 python:
 
     def reset_invalid_uniforms(uniform_disobedience_priority): #Called by all uniform policies to clear newly inappropriate planned uniforms.
         slut_limit, underwear_limit, limited_to_top = mc.business.get_uniform_limits()
-        for employee in mc.business.get_employee_list():
-            if employee.planned_uniform:
-                if employee.planned_uniform.slut_requirement > slut_limit and employee.planned_uniform.slut_requirement > employee.effective_sluttiness():
-                    employee.planned_uniform = None
-                    employee.apply_outfit()
+        for employee in [x for x in mc.business.get_employee_list() if x.planned_uniform and x.planned_uniform.slut_requirement > slut_limit and x.planned_uniform.slut_requirement > x.effective_sluttiness()]:
+            employee.planned_uniform = None
+            employee.apply_outfit()
         return
 
     def strict_uniform_policy_requirement(): #
@@ -87,7 +85,7 @@ init 0 python:
             return False
 
     minimal_coverage_uniform_policy = Policy(name = "Minimal Coverage Corporate Uniforms",
-        desc = "Corporate dress code is broadened further. Uniforms must now only meet a \"minumum coverage\" requirement, generally nothing more than a set of bra and panties. Full uniforms can have a sluttiness score of 60, underwear sets can go up to 15.",
+        desc = "Corporate dress code is broadened further. Uniforms must now only meet a \"minimum coverage\" requirement, generally nothing more than a set of bra and panties. Full uniforms can have a sluttiness score of 60, underwear sets can go up to 15.",
         cost = 10000,
         toggleable = True,
         requirement = minimal_coverage_uniform_policy_requirement,
@@ -141,7 +139,7 @@ init 0 python:
             return False
 
     male_focused_marketing_policy = Policy(name = "Male Focused Modeling",
-        desc = "The adage \"Sex Sells\" is especially true when selling your serum to men. Serum will sell for +1% per point of sluttiness of your marketing uniform.",
+        desc = "The adage \"Sex Sells\" is especially true when selling your serum to men. Serum will sell for %1 per point of sluttiness of your marketing uniform.",
         cost = 500,
         toggleable = True,
         requirement = male_focused_marketing_requirement,
