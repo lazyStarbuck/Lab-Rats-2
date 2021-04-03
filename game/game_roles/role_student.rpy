@@ -1397,16 +1397,19 @@ label student_punish_suck(the_person, was_failure, wants_to_fail, successes = 0,
         $ the_person.draw_person(position = "blowjob")
         "[the_person.possessive_title] gets onto her knees again."
         mc.name "Let's pick up the intensity, alright?"
+        $ mc.change_locked_clarity(10)
         "She nods and leans forward. You set a timer on your phone as she opens her mouth and slides your tip inside."
         $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.65)
         "This time she doesn't stop there. She slides you deeper in her mouth, running her lips along the length of your shaft."
         "After a moment to adjust she starts to bob her head up and down your length."
+        $ mc.change_locked_clarity(25)
         "You rest a hand on the back of [the_person.possessive_title]'s head and lean back, content to just enjoy your blowjob."
         "You're interrupted by your phone beeping the end of her two minutes."
         if was_failure:
             "[the_person.title] pops off your cock and wipes the last lines of spit from her lips."
             "Without a word she sits back down on her chair."
         else:
+            $ mc.change_locked_clarity(5)
             "[the_person.title] gives you a few last enthusiastic strokes with her mouth, then pops off."
             "She is smiling as she sits back down."
         $ the_person.change_arousal(5 if was_failure else 10)
@@ -1420,12 +1423,15 @@ label student_punish_suck(the_person, was_failure, wants_to_fail, successes = 0,
         "[the_person.title] knows the routine by now. She gets onto her knees in front of you, ready to take your cock in her mouth."
         mc.name "Take a deep breath, because this time you aren't getting any breaks."
         "She nods and takes a few breaths, eyes fixed on the hard dick in front of her."
+        $ mc.change_locked_clarity(20)
         "When she's ready she leans in and slides you into her mouth. You place a hand on her head and encourage her to slide all the way down."
         "You feel the tip of your cock tap the back of her throat. She shuffles uncomfortably, fighting her gag instinct."
         $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.8)
         "She starts to move her head up and down, but you use your hand to stop her from coming too far off of your cock."
         "You enjoy your deep-throat session. As you pass the minute mark [the_person.title] starts to try and pull off."
+        $ mc.change_locked_clarity(20)
         mc.name "Not yet, you've got some more time to go."
+        $ mc.change_locked_clarity(20)
         "She squeezes her eyes shut and struggles on as her eyes start to water from the effort. Her warm throat feels amazing wrapped around your shaft."
         "[the_person.possessive_title] starts to squirm again, now because she is desperate for a fresh breath of air."
         "You pull your phone out with one hand and count down the last few seconds of the timer."
@@ -1454,31 +1460,38 @@ label student_punish_suck(the_person, was_failure, wants_to_fail, successes = 0,
         $ the_person.draw_person(position = "blowjob")
         "[the_person.title] slides off of her chair and kneels down in front of you."
         mc.name "Take a deep breath. There isn't going to be a timer this time, I'm just going to fuck your face until I cum."
+        $ mc.change_locked_clarity(15)
         "She nods and opens her mouth, offering it to you."
         "You place your hands on either side of her head and lean her towards you. She wraps her lips around your cock as you bring it close."
         $ the_person.change_arousal(8 if was_failure else 15)
         $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 1.0)
         "You don't waste any time. As soon as your cock is in her mouth you slam it down to the base. [the_person.title] gags, throwing her arms out to her side."
         "You slam [the_person.possessive_title]'s head up and down, forcing her to face-fuck you."
+        $ mc.change_locked_clarity(25)
+        $ mc.change_locked_clarity(25)
+        $ mc.change_locked_clarity(25)
         "She struggles to keep up, gagging a little bit with each thrust and trailing spit down her chin and onto her chest."
         "You're already so worked up that it doesn't take long before you feel your climax approaching."
-        menu:
-            "Cum down her throat":
-                mc.name "Fuck, here I cum!"
-                "You wrap one arm around [the_person.title]'s head, holding it in the crook of your elbow."
-                "You use the leverage to force yourself as deep as possible as you cum. She gags and struggles instinctively as you dump your load down her throat."
-                $ the_person.cum_in_mouth()
-                $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.2)
-                "When you are finished you let go and lean back in your chair. [the_person.title] rockets back, gasping for fresh air."
-                "She's a mess after your face fuck. Her eyes are watering, her cheeks are red, and she's still trying to swallow down the last of your cum between pants."
+        $ climax_controller = ClimaxController(["Cum down her throat.","throat"],["Cum on her face.","face"])
+        $ the_choice = climax_controller.show_climax_menu()
+        if the_choice == "Cum down her throat.":
+            mc.name "Fuck, here I cum!"
+            "You wrap one arm around [the_person.title]'s head, holding it in the crook of your elbow."
+            $ climax_controller.do_clarity_release(the_person)
+            "You use the leverage to force yourself as deep as possible as you cum. She gags and struggles instinctively as you dump your load down her throat."
+            $ the_person.cum_in_mouth()
+            $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.2)
+            "When you are finished you let go and lean back in your chair. [the_person.title] rockets back, gasping for fresh air."
+            "She's a mess after your face fuck. Her eyes are watering, her cheeks are red, and she's still trying to swallow down the last of your cum between panting breaths."
 
-            "Cum on her face":
-                "You thrust yourself down her throat one last time, then pull [the_person.title]s head back with both hands."
-                "Your cock spasms, firing it's first pulse of cum over her eye and forehead. She gasps desperately for her first breath of fresh air"
-                $ the_person.cum_on_face()
-                $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.2)
-                "You grunt as you fire your second and third strings of cum onto [the_person.possessive_title]'s face, coating it thoroughly."
-                "When you're finished [the_person.title] is a mess. Cheeks red, eyes watering, and face plastered with a thick load of semen."
+        elif the_choice == "Cum on her face.":
+            "You thrust yourself down her throat one last time, then pull [the_person.title]s head back with both hands."
+            $ climax_controller.do_clarity_release(the_person)
+            "Your cock spasms, firing its first pulse of cum over her eye and forehead. She gasps desperately for her first breath of fresh air"
+            $ the_person.cum_on_face()
+            $ the_person.draw_person(position = "blowjob", special_modifier = "blowjob", the_animation = blowjob_bob, animation_effect_strength = 0.2)
+            "You grunt as you fire your second and third strings of cum onto [the_person.possessive_title]'s face, coating it thoroughly."
+            "When you're finished [the_person.title] is a mess. Cheeks red, eyes watering, and face plastered with a thick load of semen."
 
         if was_failure:
             mc.name "I hope that teaches you a lesson [the_person.title]. I expect you to do better next time."
@@ -1506,6 +1519,7 @@ label student_mom_intro(the_person):
     "You ring the doorbell to [emily.title]'s house and wait. A moment later you hear footsteps and the door opens."
     $ the_person.draw_person()
     $ the_person.set_title("???")
+    $ mc.change_locked_clarity(10)
     the_person "Hello. Can I help you?"
     mc.name "I'm here to tutor [emily.title]. Is she in?"
     if emily in emily.home.people:
