@@ -136,37 +136,43 @@ label outro_cowgirl(the_girl, the_location, the_object):
     elif the_girl.effective_sluttiness("creampie") < 60:
         #She always pull off and you cum on her stomach.
         #There is no condom branch here because 100% of the condom branches go to the first version.
-        the_girl "Oh shit, you can't cum inside me!"
+        the_girl.char "Oh shit, you can't cum inside me!"
         "[the_girl.possessive_title] jerks up, pulls off your cock, and lowers herself back down."
         "She leans back and uses one hand to push your shaft against the lips of her pussy, grinding against it until you climax."
-        the_girl "Cum for me [the_girl.mc_title], I want you to cum on me!"
+        the_girl.char "Cum for me [the_girl.mc_title], I want you to cum on me!"
+        $ climax_controller = ClimaxController(["Cum on her.", "body"])
+        $ climax_controller.show_climax_menu()
         "You tense up and cum, shooting your thick load up and onto [the_girl.title]'s stomach. She keeps grinding against you're completely spent."
+        $ climax_controller.do_clarity_release(the_girl)
         $ the_girl.cum_on_stomach()
         $ cowgirl.redraw_scene(the_girl)
 
     else:
         #She hesitates and you can decide to pull her down or not.
         #There is no condom branch here because 100% of the condom branches go to the first version.
-        "[the_girl.title] starts to pull up and off of you. She hesitates with the tip of your cock just inside of her pussy."
-        the_girl "I... I really shouldn't let you..."
+        "[the_girl.title] starts to pull up and off of you. She hesistates with the tip of your cock just inside of her pussy."
+        the_girl.char "I... I really shouldn't let you..."
         "She bites her lip and moans, unsure of what to do."
-        menu:
-            "Pull her down and cum inside her":
-                "You reach up and grab [the_girl.possessive_title] by the hips. With one confident pull she plunges back onto your cock, gasping with pleasure."
-                "The feeling of her warm, wet pussy sliding down and engulfing your cock again pushes you over the edge. You pull [the_girl.title] tight against you and unload inside of her."
-                the_girl "Ah! Just... Just this once!"
-                $ the_girl.call_dialogue("cum_vagina")
-                $ the_girl.cum_in_vagina()
-                $ the_girl.change_obedience(3)
-                "You give a few half-hearted pumps when you're done, then tap [the_girl.title] on the ass. She slides off of your dick and collapses beside you."
+        $ climax_controller = ClimaxController(["Pull her down and cum inside her.", "pussy"],["Let her pull off and cum on her stomach."])
+        $ the_choice = climax_controller.show_climax_menu()
+        if the_choice == "Pull her down and cum inside her.":
+            "You reach up and grab [the_girl.possessive_title] by the hips. With one confident pull she plunges back onto your cock, gasping with pleasure."
+            "The feeling of her warm, wet pussy sliding down and englufing your cock again pushes you over the edge. You pull [the_girl.title] tight against you and unload inside of her."
+            the_girl.char "Ah! Just... Just this once!"
+            $ the_girl.call_dialogue("cum_vagina")
+            $ climax_controller.do_clarity_release(the_girl)
+            $ the_girl.cum_in_vagina()
+            $ the_girl.change_obedience(3)
+            "You give a few half-hearted pumps when you're done, then tap [the_girl.title] on the ass. She slides off of your dick and collapses beside you."
 
-            "Let her pull off and cum on her stomach":
-                "You stay silent. [the_girl.possessive_title] waits another second, as if waiting to be convinced, then pulls off of your cock."
-                "She grinds the lips of her pussy against your shaft as you climax. You fire your hot load over her stomach."
-                $ the_girl.cum_on_stomach()
-                $ cowgirl.redraw_scene(the_girl)
-                the_girl "Whew, that was close..."
-                "She rolls off and lies next to you on the [the_object.name]."
+        elif the_choice == "Let her pull off and cum on her stomach.":
+            "You stay silent. [the_girl.possessive_title] waits another second, as if waiting to be convinced, then pulls off of your cock."
+            "She grinds the lips of her pussy against your shaft as you climax. You fire your hot load over her stomach."
+            $ the_girl.cum_on_stomach()
+            $ climax_controller.do_clarity_release(the_girl)
+            $ cowgirl.redraw_scene(the_girl)
+            the_girl.char "Whew, that was close..."
+            "She rolls off and lies next to you on the [the_object.name]."
     return
 
 label transition_default_cowgirl(the_girl, the_location, the_object):

@@ -100,58 +100,63 @@ label scene_skull_fuck_3(the_girl, the_location, the_object):
 label outro_skull_fuck(the_girl, the_location, the_object):
     "[the_girl.title]'s warm, wet throat wrapped around your cock sends shivers up your spine and the sound of her gagging on your dick pushes you past your limits."
     "You have a brief moment to consider how you want to finish as you jackhammer yourself in and out of her mouth."
-    menu:
-        "Cum on her face":
-            mc.name "Fuck, here I cum!"
-            "With both hands firmly on [the_girl.possessive_title]'s head you wait until the last possible moment to stop skull fucking her and pull out."
+    $ climax_controller = ClimaxController(["Cum on her face.", "face"],["Cum down her throat.","throat"])
+    $ the_choice = climax_controller.show_climax_menu()
+    if the_choice == "Cum on her face.":
+        mc.name "Fuck, here I cum!"
+        "With both hands firmly on [the_girl.possessive_title]'s head you wait until the last possible moment to stop skull fucking her and pull out."
+        $ skull_fuck.current_modifier = None
+        $ skull_fuck.redraw_scene(the_girl)
+        "You step back, dragging your hard cock from her lips just as it starts to spasm out your hot load."
+        $ the_girl.cum_on_face()
+        $ skull_fuck.redraw_scene(the_girl)
+        "She opens her mouth to gasp for air and gets a mouthful of cum along with it."
+        "You take one hand off [the_girl.title]'s head and grab your cock, guiding it as you pulse your semen all over her face."
+        $ climax_controller.do_clarity_release(the_girl)
+        if the_girl.get_opinion_score("drinking cum") > 0:
+            $ the_girl.discover_opinion("drinking cum")
+            "When you're done she closes her mouth and happily gulps down all of the cum you had landed in there."
+        else:
+            "When you're done she lets your cum dripple out of her mouth, down her chin, and finally between her tits."
+        $ the_girl.call_dialogue("cum_face")
+
+
+    elif the_choice == "Cum down her throat.":
+        mc.name "Fuck, here I cum!"
+        if the_girl.obedience >= 130 or the_girl.get_opinion_score("drinking cum") > 0: #She takes it like a champ
+            "With both hands firmly on [the_girl.possessive_title]'s head you pull her as far down your cock as she'll go."
+            "You grunt and release your load, firing pulse after pulse of hot cum down her throat and directly into her stomach."
             $ skull_fuck.current_modifier = None
-            $ the_girl.draw_person(position = "kneeling1")
-            "You step back, dragging your hard cock from her lips just as it starts to spasm out your hot load."
-            $ the_girl.cum_on_face()
-            $ the_girl.draw_person(position = "kneeling1")
-            "She opens her mouth to gasp for air and gets a mouthful of cum along with it."
-            "You take one hand off [the_girl.title]'s head and grab your cock, guiding it as you pulse your semen all over her face."
+            $ skull_fuck.redraw_scene(the_girl)
+            "[the_girl.title] struggles to drink it all down, but doesn't try and pull off."
+            $ the_girl.cum_in_mouth()
+            $ skull_fuck.redraw_scene(the_girl)
+            $ climax_controller.do_clarity_release(the_girl)
+            "When the last moments of your climax have passed you pull back, cock trailing spit and cum as you leave her mouth."
             if the_girl.get_opinion_score("drinking cum") > 0:
-                "When you're done she closes her mouth and happily gulps down all of the cum you had landed in there."
+                the_girl.char "I thought you were going to drown me with your cum for a moment... Mmmm."
+                $ the_girl.change_slut_temp(1)
+                $ the_girl.change_happiness(1)
+                "She shivers with pleasure at the thought."
             else:
-                "When you're done she lets your cum drizzle out of her mouth, down her chin, and finally between her tits."
-            $ the_girl.call_dialogue("cum_face")
-
-
-        "Cum down her throat":
-            mc.name "Fuck, here I cum!"
-            if the_girl.obedience >= 130 or the_girl.get_opinion_score("drinking cum") > 0: #She takes it like a champ
-                "With both hands firmly on [the_girl.possessive_title]'s head you pull her as far down your cock as she'll go."
-                "You grunt and release your load, firing pulse after pulse of hot cum down her throat and directly into her stomach."
-                $ skull_fuck.current_modifier = None
-                $ skull_fuck.redraw_scene(the_girl)
-                "[the_girl.title] struggles to drink it all down, but doesn't try and pull off."
-                $ the_girl.cum_in_mouth()
-                $ skull_fuck.redraw_scene(the_girl)
-                "When the last moments of your climax have passed you pull back, cock trailing spit and cum as you leave her mouth."
-                if the_girl.get_opinion_score("drinking cum") > 0:
-                    the_girl "I thought you were going to drown me with your cum for a moment... Mmmm."
-                    $ the_girl.change_slut_temp(1)
-                    $ the_girl.change_happiness(1)
-                    "She shivers with pleasure at the thought."
-                else:
-                    "She runs the back of her hand along her lips, removing the cum trails and sits back to catch her breath."
-                    $ the_girl.call_dialogue("cum_mouth")
-            else:
-                "With both hands firmly on [the_girl.possessive_title]'s head you pull her as far down your cock as she'll go."
-                "[the_girl.title]'s eyes go wide as she realizes you don't intend to let her off your cock as you cum."
-                "She tries to pull her head back, but you hold it in place as you begin to unload your hot, sticky load directly into her throat."
-                "For a brief second she manages to keep up with the torrent of cum, then it overwhelms her."
-                "She spasms and gags. A mix of her spit and your semen bubble around the base of your cock, collecting in drops that roll down her chin and onto her tits."
-                "She gags and coughs again, this time blowing little cum bubbles out of her nose as her body struggles to find somewhere to put more and more of your sperm."
-                $ the_girl.cum_in_mouth()
-                $ skull_fuck.redraw_scene(the_girl)
-                "Finally you're spent and you finally let [the_girl.title] pull off of your cock."
-                the_girl "Guahh... Guahh... Ah.... Ah...."
-                mc.name "Fuck that felt good."
-                the_girl "There was so much... Ah... I thought I was going to drown in it..."
-                "Still gasping for air, she wipes your sperm away from her nose and chin, then swallows loudly to get rid of the rest of it."
+                "She runs the back of her hand along her lips, removing the cum trails and sits back to catch her breath."
                 $ the_girl.call_dialogue("cum_mouth")
+        else: #Could use improvement
+            "With both hands firmly on [the_girl.possessive_title]'s head you pull her as far down your cock as she'll go."
+            "[the_girl.title]'s eyes go wide as she  realises you don't intend to her off your cock as you cum."
+            "She tries to pull her head back, but you hold it in place as you begin to unload your hot, sticky load directly into her throat."
+            "For a brief second she manages to keep up with the torrent of cum, then it overwhelms her."
+            "She spasms and gags. A mix of her spit and your semen bubble around the base of your cock, collecting in drops that roll down her chin and onto her tits."
+            "She gags and coughs again, this time blowing little cum bubbles out of her nose as her body struggles to find somewhere to put more and more of your sperm."
+            $ the_girl.cum_in_mouth()
+            $ skull_fuck.redraw_scene(the_girl)
+            $ climax_controller.do_clarity_release(the_girl)
+            "Finally you're spent and you finally let [the_person.title] pull off of your cock."
+            the_girl.char "Guahh... Guahh... Ah.... Ah...."
+            mc.name "Fuck that felt good."
+            the_girl.char "There was so much... Ah... I thought I was going to drown in it..."
+            "Still gasping for air, she wipes your sperm away from her nose and chin, then swallows loudly to get rid of the rest of it."
+            $ the_girl.call_dialogue("cum_mouth")
 
     return
 

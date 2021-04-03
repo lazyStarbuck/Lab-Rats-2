@@ -81,37 +81,46 @@ label scene_handjob_3(the_girl, the_location, the_object):
 label outro_handjob(the_girl, the_location, the_object):
     # describe wanting to cum
     "[the_girl.title]'s touch pulls you closer and closer to your climax. She smiles at you and speeds up."
-    the_girl "Are you close? I want you to cum for me."
+    the_girl.char "Are you close? I want you to cum for me."
     "Her hand makes wet, sloppy noises as she jerks you towards completion."
     $ slut_willingness = the_girl.effective_sluttiness()
     if slut_willingness > (60 - the_girl.get_opinion_score("drinking cum")*5):
         "Just as you're about to fire your load [the_girl.possessive_title] drops to the ground in front of you."
-        $ the_girl.draw_person(position = "blowjob")
-        the_girl "I want you to put that hot load in my mouth."
+        $ the_person.draw_person(position = "blowjob")
+        the_girl.char "I want you to put that hot load in my mouth."
         "Just hearing her say that would have pushed you over the edge - her soft, wet hand working your cock is just a bonus."
         "She opens up her mouth and sticks out her tongue, presenting you with a clear target."
+        $ climax_controller = ClimaxController(["Cum in her mouth.", "mouth"])
+        $ the_choice = climax_controller.show_climax_menu()
         $ the_girl.cum_in_mouth()
         "You spasm and shoot out a pulse of hot sperm, splashing it over her tongue and down the back of her throat."
         "She maintains eye contact as you fire off the rest of your load, then closes her mouth and swallows quietly."
+        $ climax_controller.do_clarity_release(the_girl)
         $ the_girl.call_dialogue("cum_mouth")
 
     elif slut_willingness > (40 - (the_girl.get_opinion_score("cum facials")*5 + the_girl.get_opinion_score("being covered in cum")*5)):
         "Just as you're about to fire your load [the_girl.possessive_title] drops to the ground in front of you."
         $ the_girl.draw_person(position = "blowjob")
-        the_girl "I want you to cum all over my face. Make me a mess!"
+        the_girl.char "I want you to cum all over my face. Make me a mess!"
         "Just hearing her say that would have pushed you over the edge - her soft, wet hand working your cock is just a bonus."
+        $ climax_controller = ClimaxController(["Cum on her face.", "face"])
+        $ the_choice = climax_controller.show_climax_menu()
+
         "She strokes you to completion, closing her eyes and aiming your cock as you spasm and start to pulse out your hot load."
         $ the_girl.cum_on_face()
         $ the_girl.draw_person(position = "blowjob")
-        "You fire rope after rope of thick cum over [the_girl.title]'s waiting face. When you're finished she opens her eyes again and smiles up at you."
+        $ climax_controller.do_clarity_release(the_girl)
+        "You fire rope after rope of thick cum over [the_person.title]'s waiting face. When you're finished she opens her eyes again and smiles up at you."
         $ the_girl.call_dialogue("cum_face")
 
     elif slut_willingness > (25 - (the_girl.get_opinion_score("being covered in cum")*5)) and the_girl.has_large_tits():
         # You cum on her tits
         "Just as you're about to fire your load [the_girl.possessive_title] drops to the ground in front of you."
         $ the_girl.draw_person(position = "blowjob")
-        the_girl "I want you to put your cum all over my tits [the_girl.mc_title]!"
+        the_girl.char "I want you to put your cum all over my tits [the_girl.mc_title]!"
         "Just hearing her say that would have pushed you over the edge, but her soft, wet hand working your cock doesn't hurt either."
+        $ climax_controller = ClimaxController(["Cum on her tits.", "tits"])
+        $ the_choice = climax_controller.show_climax_menu()
         $ the_girl.cum_on_tits()
         if the_girl.outfit.tits_available(): #You can shoot it directly onto her tits
             "She aims your cock and strokes you to completion. You fire your load in thick ropes onto her large and ready tits."
@@ -121,13 +130,16 @@ label outro_handjob(the_girl, the_location, the_object):
                 "She aims your cock and strokes you to completion. You fire your load in thick ropes over the shape of her tits and onto her [blocker.name]."
             else:
                 "She strokes you to completion and you fire your load onto her tits." # just in case something weird happens and we get None.
-            $ del blocker
+        $ climax_controller.do_clarity_release(the_girl)
         #TODO: Add a "cum_tits" dialogue section for personalities.
 
     else:
         # You cum into the air/floor
-        the_girl "Cum for me [the_girl.mc_title], do it!"
+        the_girl.char "Cum for me [the_girl.mc_title], do it!"
+        $ climax_controller = ClimaxController(["Cum on the floor.", "air"])
+        $ the_choice = climax_controller.show_climax_menu()
         "You reach your limit and start to pulse your load out in thick ropes, past [the_girl.possessive_title]'s thigh and onto the floor."
+        $ climax_controller.do_clarity_release(the_girl)
         "She gives you a few more strokes until you're completely spent, then lets go and gives you a kiss."
 
     return

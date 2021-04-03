@@ -218,63 +218,50 @@ label outro_piledriver(the_girl, the_location, the_object):
     "You reach your limit and feel your orgasm approaching quickly."
     mc.name "Fuck me, I'm going to cum!"
     $ the_girl.call_dialogue("cum_pullout")
-    menu:
-        "Cum inside of her":
-            if the_girl.sluttiness > 120 or mc.condom:
-                if mc.condom:
-                    "You had no intention of stopping, but hearing her ask for it makes you cum even harder."
-                    "You push yourself as deep as you can manage and pump your load out into her cunt, hopefully contained by your condom."
-                    $ the_girl.call_dialogue("cum_condom")
-                    "You take a moment to catch your breath, then you pull your cock out of [the_girl.title] and sit back down. The condom tip is ballooned out, hanging to one side and filled with your cum."
-                    if the_girl.get_opinion_score("drinking cum") > 0 and the_girl.sluttiness > 50:
-                        $ the_girl.discover_opinion("drinking cum")
-                        "When you let [the_girl.possessive_title] down she reaches for your cock. With delicate fingers she slides the condom off of you."
-                        the_girl "It would be a shame to waste all of this, right?"
-                        "She smiles and brings the condom to her mouth. She tips the bottom up and drains it into her mouth."
-                        $ the_girl.change_slut_temp(the_girl.get_opinion_score("drinking cum"))
-                    else:
-                        "When you let [the_girl.possessive_title] down she reaches for your cock, removes the condom, and ties the end in a knot."
-                        the_girl "Look at all that cum. Well done."
 
-                else:
-                    "You had no intention of stopping either way, but hearing her ask for it makes you cum even harder. You gasp and push yourself as deep as you can, draining your balls into [the_girl.title]'s cunt."
-                    $ the_girl.cum_in_vagina()
-                    $ piledriver.redraw_scene(the_girl)
-                    $ the_girl.call_dialogue("cum_vagina")
-                    the_girl "Mmmm, it's so nice and warm..."
-                    "You take a moment to catch your breath, then sit back and pull your cock out of [the_girl.title]."
-                    "You keep her on her back for a few more seconds, enjoying the way the position keeps your semen inside of her."
+    $ climax_controller = ClimaxController(["Cum inside of her.", "pussy"],["Cum on her face.","face"])
+    $ the_choice = climax_controller.show_climax_menu()
+
+    if the_choice == "Cum inside of her.":
+        if mc.condom:
+            "You push yourself as deep as you can manage and pump your load out into her cunt, hopefully contained by your condom."
+            $ the_girl.call_dialogue("cum_condom")
+            $ climax_controller.do_clarity_release(the_girl)
+            "You take a moment to catch your breath, then you pull your cock out of [the_girl.title] and sit back down. The condom tip is ballooned out, hanging to one side and filled with your cum."
+            if the_girl.get_opinion_score("drinking cum") > 0 and the_girl.sluttiness > 50:
+                $ the_girl.discover_opinion("drinking cum")
+                "When you let [the_girl.possessive_title] down she reaches for your cock. With delicate fingers she slides the condom off of you."
+                the_girl.char "It would be a shame to waste all of this, right?"
+                "She smiles and brings the condom to her mouth. She tips the bottom up and drains it into her mouth."
+                $ the_girl.change_slut_temp(the_girl.get_opinion_score("drinking cum"))
             else:
-                if not the_girl.on_birth_control or not the_person.event_triggers_dict.get("preg_knows", False):
-                    the_girl "Wait, make sure to pull out!"
-                    "It's a little late for that now. You gasp and push yourself as deep as you can, draining your balls into [the_girl.possessive_title]'s cunt."
-                else:
-                    if the_girl.get_opinion_score("creampies") > 0:
-                        the_girl  "Yes! Fill me with your cum!"
-                    "You gasp and push yourself as deep as you can, draining your balls into [the_girl.possessive_title]'s cunt."
+                "When you let [the_girl.possessive_title] down she reaches for your cock, removes the condom, and ties the end in a knot."
+                the_girl.char "Look at all that cum. Well done."
 
-                $ the_girl.cum_in_vagina()
-                $ piledriver.redraw_scene(the_girl)
-                if the_person.event_triggers_dict.get("preg_knows", False):
-                    the_girl "Oh fuck... well, I can't get more pregnant."
-                elif not the_girl.on_birth_control:
-                    the_girl "Oh fuck... what if I get pregnant [the_girl.mc_title]?"
-                "You take a moment to catch your breath, then sit back and pull your cock out of [the_girl.title]."
-                "You keep her on her back for a few more seconds, enjoying the way the position keeps your semen inside of her."
-
-        "Cum on her face":
-            if mc.condom:
-                "You pull your cock out at the last minute, whipping the condom off with one hand as you aim it towards [the_girl.possessive_title]'s face."
-            else:
-                "You pull your cock out at the last minute, stroking it off with one hand as you point it towards [the_girl.possessive_title]'s face."
-            $ the_girl.cum_on_face()
+        else:
+            "You gasp and push yourself as deep as you can, draining your balls into [the_girl.title]'s cunt."
+            $ the_girl.cum_in_vagina()
             $ piledriver.redraw_scene(the_girl)
-            if the_girl.sluttiness > 80:
-                "[the_girl.title] sticks out her tongue and stares into your eyes as you climax. You spray your load onto her face, splattering some over her tongue and sending some right into her mouth."
-                "She closes her mouth and swallows quickly, then bites her lip and smiles at you."
-            else:
-                "[the_girl.title] closes her eyes and waits for you to climax. You spray your load over her face and dribble a few drops of sperm onto her chest."
-            "You sit back and let [the_girl.possessive_title]'s legs down. You enjoy the sight of her covered in your semen when she looks at you."
+            $ climax_controller.do_clarity_release(the_girl)
+            $ the_girl.call_dialogue("cum_vagina")
+            "You take a moment to catch your breath, then sit back and pull your cock out of [the_girl.title]."
+            "You keep her on her back for a few more seconds, enjoying the way the position keeps your semen pooled inside of her."
+
+    elif the_choice == "Cum on her face.":
+        if mc.condom:
+            "You pull your cock out at the last minute, whipping the condom off with one hand as you aim it towards [the_girl.possessive_title]'s face."
+        else:
+            "You pull your cock out at the last minute, stroking it off with one hand as you point it towards [the_girl.possessive_title]'s face."
+        $ the_girl.cum_on_face()
+        $ piledriver.redraw_scene(the_girl)
+        if the_girl.sluttiness > 80 or the_person.get_opinion_score("drinking cum") > 0:
+            $ the_girl.discover_opinion("drinking cum")
+            "[the_girl.title] sticks out her tongue and stares into your eyes as you climax. You spray your load onto her face, splattering some over her tongue and sending some right into her mouth."
+            "She closes her mouth and swallows quickly, then bites her lip and smiles at you."
+        else:
+            "[the_girl.title] closes her eyes and waits for you to climax. You spray your load over her face and dribble a few drops of sperm onto her chest."
+        $ climax_controller.do_clarity_release(the_girl)
+        "You sit back and let [the_girl.possessive_title]'s legs down. You enjoy the sight of her covered in your semen when she looks at you."
     return
 
 label transition_piledriver_missionary(the_girl, the_location, the_object):
