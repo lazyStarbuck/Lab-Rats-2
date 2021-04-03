@@ -20,3 +20,5 @@
 *.rpyc
 !*.rpy
 !*.xml
+game/README.md
+game/.gitignore
