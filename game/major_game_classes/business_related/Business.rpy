@@ -5,7 +5,7 @@ init -2 python:
         # 2) researching new serums.
         # 2a) The player (only) designs new serums to be researched.
         # 3) working in the lab to produce serums.
-        # 4) Working in marketing. Increases volumn you can sell, and max price you can sell for.
+        # 4) Working in marketing. Increases volume you can sell, and max price you can sell for.
         # 5) Packaging and selling serums that have been produced.
         # 6) General secretary work. Starts at none needed, grows as your company does (requires an "HR", eventually). Maybe a general % effectivness rating.
         def __init__(self, name, m_div, p_div, r_div, s_div, h_div):
@@ -15,14 +15,14 @@ init -2 python:
             self.bankrupt_days = 0 #How many days you've been bankrupt. If it hits the max value you lose.
             self.max_bankrupt_days = 3 #How many days you can be negative without loosing the game. Can be increased through research.
 
-            self.m_div = m_div #The phsyical locations of all of the teams, so you can move to different offices in the future.
+            self.m_div = m_div #The physical locations of all of the teams, so you can move to different offices in the future.
             self.p_div = p_div
             self.r_div = r_div
             self.s_div = s_div
             self.h_div = h_div
 
-            #Uniforms are stored as a wardrobe specific to each department. There is also a company wide wardrobe that can be accessed.
-            #self.all_uniform = Wardrobe(self.name + " All Wardrobe")
+            # Uniforms are stored as a wardrobe specific to each department. There is also a company wide wardrobe that can be accessed.
+            # self.all_uniform = Wardrobe(self.name + " All Wardrobe")
             self.m_uniform = Wardrobe(self.name + " Marketing Wardrobe")
             self.p_uniform = Wardrobe(self.name + " Production Wardrobe")
             self.r_uniform = Wardrobe(self.name + " Research Wardrobe")
@@ -36,14 +36,14 @@ init -2 python:
             self.s_serum = None
             self.h_serum = None
 
-            self.research_team = [] #Researches new serums that the player designs, does theoretical research into future designs, or improves old serums slightly over time
-            self.market_team = [] # Increases company marketability. Raises max price serum can be sold for, and max volumn that can be sold.
-            self.supply_team = [] # Buys the raw supplies used by the other departments.
-            self.production_team = [] # Physically makes the serum and sends it off to be sold.
-            self.hr_team = [] # Manages everyone else and improves effectiveness. Needed as company grows.
+            # self.research_team = [] #Researches new serums that the player designs, does theoretical research into future designs, or improves old serums slightly over time
+            # self.market_team = [] # Increases company marketability. Raises max price serum can be sold for, and max volume that can be sold.
+            # self.supply_team = [] # Buys the raw supplies used by the other departments.
+            # self.production_team = [] # Physically makes the serum and sends it off to be sold.
+            # self.hr_team = [] # Manages everyone else and improves effectiveness. Needed as company grows.
 
             self.head_researcher = None #A reference to the head researcher is stored here, for use in important events.
-            self.company_model = None #A reference to the currnet company model. May be used for some events.
+            self.company_model = None #A reference to the current company model. May be used for some events.
 
             self.max_employee_count = 5
 
@@ -55,7 +55,7 @@ init -2 python:
             self.team_effectiveness = 100 #Ranges from 50 (Chaotic, everyone functions at 50% speed) to 200 (masterfully organized). Normal levels are 100, special traits needed to raise it higher.
             self.effectiveness_cap = 100 #Max cap, can be raised.
 
-            self.research_tier = 0 #The tier of research the main charcter has unlocked with storyline events. 0 is starting, 3 is max.
+            self.research_tier = 0 #The tier of research the main character has unlocked with storyline events. 0 is starting, 3 is max.
 
             self.serum_designs = [] #Holds serum designs that you have researched.
             self.active_research_design = None #The current research (serum design or serum trait) the business is working on
@@ -68,8 +68,8 @@ init -2 python:
             self.inventory = SerumInventory([])
             self.sale_inventory = SerumInventory([])
 
-            self.policy_list = [] #This is a list of Policy objects.
-            self.active_policy_list = [] #This is a list of currently active policies (vs just owned ones)
+            #self.policy_list = [] #This is a list of Policy objects.
+            #self.active_policy_list = [] #This is a list of currently active policies (vs just owned ones)
 
             self.message_list = [] #This list of strings is shown at the end of each day on the business update screen. Cleared each day.
             self.counted_message_list = {} #This is a dict holding the count of each message stored in it. Used when you want to have a message that is counted and the total shown at the end of the day.
@@ -97,22 +97,143 @@ init -2 python:
             self.event_triggers_dict["outfit_tutorial"] = 1 #We have an outfit design tutorial.
             self.event_triggers_dict["hiring_tutorial"] = 1 #We have an outfit design tutorial.
 
-            self.listener_system = ListenerManagementSystem()
+            self.listener_system = Listener_Management_System()
+
+        @property
+        def active_policy_list(self):
+            if not hasattr(self, "_active_policy_list"):
+                self._active_policy_list = MappedList(Policy, all_policies_in_the_game)
+            return self._active_policy_list
+
+        @property
+        def policy_list(self):
+            if not hasattr(self, "_policy_list"):
+                self._policy_list = MappedList(Policy, all_policies_in_the_game)
+            return self._policy_list
+
+        @property
+        def m_div(self):
+            if not hasattr(self, "_m_div"):
+                self._m_div = None
+            return next((x for x in list_of_places if x.identifier == self._m_div), None)
+
+        @m_div.setter
+        def m_div(self, value):
+            if isinstance(value, Room):
+                self._m_div = value.identifier
+
+        @property
+        def p_div(self):
+            if not hasattr(self, "_p_div"):
+                self._p_div = None
+            return next((x for x in list_of_places if x.identifier == self._p_div), None)
+
+        @p_div.setter
+        def p_div(self, value):
+            if isinstance(value, Room):
+                self._p_div = value.identifier
+
+        @property
+        def r_div(self):
+            if not hasattr(self, "_r_div"):
+                self._r_div = None
+            return next((x for x in list_of_places if x.identifier == self._r_div), None)
+
+        @r_div.setter
+        def r_div(self, value):
+            if isinstance(value, Room):
+                self._r_div = value.identifier
+
+        @property
+        def s_div(self):
+            if not hasattr(self, "_s_div"):
+                self._s_div = None
+            return next((x for x in list_of_places if x.identifier == self._s_div), None)
+
+        @s_div.setter
+        def s_div(self, value):
+            if isinstance(value, Room):
+                self._s_div = value.identifier
+
+        @property
+        def h_div(self):
+            if not hasattr(self, "_h_div"):
+                self._h_div = None
+            return next((x for x in list_of_places if x.identifier == self._h_div), None)
+
+        @h_div.setter
+        def h_div(self, value):
+            if isinstance(value, Room):
+                self._h_div = value.identifier
+
+        @property
+        def head_researcher(self):
+            if not hasattr(self, "_head_researcher"):
+                self._head_researcher = None
+            return next((x for x in all_people_in_the_game() if x.identifier == self._head_researcher), None)
+
+        @head_researcher.setter
+        def head_researcher(self, value):
+            if isinstance(value, Person):
+                self._head_researcher = value.identifier
+            else:
+                self._head_researcher = None
+
+        @property
+        def company_model(self):
+            if not hasattr(self, "_company_model"):
+                self._company_model = None
+            return next((x for x in all_people_in_the_game() if x.identifier == self._company_model), None)
+
+        @company_model.setter
+        def company_model(self, value):
+            if isinstance(value, Person):
+                self._company_model = value.identifier
+            else:
+                self._company_model = None
+
+        @property
+        def research_team(self):
+            if not hasattr(self, "_research_team"):
+                self._research_team = MappedList(Person, all_people_in_the_game)
+            return self._research_team
+
+        @property
+        def market_team(self):
+            if not hasattr(self, "_market_team"):
+                self._market_team = MappedList(Person, all_people_in_the_game)
+            return self._market_team
+
+        @property
+        def supply_team(self):
+            if not hasattr(self, "_supply_team"):
+                self._supply_team = MappedList(Person, all_people_in_the_game)
+            return self._supply_team
+
+        @property
+        def production_team(self):
+            if not hasattr(self, "_production_team"):
+                self._production_team = MappedList(Person, all_people_in_the_game)
+            return self._production_team
+
+        @property
+        def hr_team(self):
+            if not hasattr(self, "_hr_team"):
+                self._hr_team = MappedList(Person, all_people_in_the_game)
+            return self._hr_team
 
         def run_turn(self): #Run each time the time segment changes. Most changes are done here.
             if time_of_day == 1 and daily_serum_dosage_policy.is_active() and self.is_work_day(): #Not done on run_day because we want it to apply at the _start_ of the day.
                 self.give_daily_serum()
 
-            #Compute efficency drop
-            for person in self.supply_team + self.research_team + self.production_team + self.market_team:
-                if person in self.s_div.people + self.r_div.people + self.p_div.people + self.m_div.people: #Only people in the office lower effectiveness, no loss on weekends, not in for the day, etc.
-                    self.team_effectiveness += -1 #TODO: Make this dependant on charisma (High charisma have a lower impact on effectiveness) and happiness.
+            #Compute efficiency drop Only people in the office lower effectiveness, no loss on weekends, not in for the day, etc.
+            for person in [x for x in self.supply_team + self.research_team + self.production_team + self.market_team if x in self.s_div.people + self.r_div.people + self.p_div.people + self.m_div.people]:
+                self.team_effectiveness -= 1 #TODO: Make this dependant on charisma (High charisma have a lower impact on effectiveness) and happiness.
 
             #Compute effiency rise from HR
-            for person in self.hr_team:
-                if person in self.h_div.people:
-                    self.hr_progress(person.charisma,person.int,person.hr_skill)
-                    person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("HR work"), add_to_log = False)
+            for person in [x for x in self.hr_team if x in self.h_div.people]:
+                self.hr_progress(person.charisma,person.int,person.hr_skill)
+                person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("HR work"), add_to_log = False)
 
             if self.team_effectiveness < 50:
                 self.team_effectiveness = 50
@@ -121,30 +242,26 @@ init -2 python:
                 self.team_effectiveness = self.effectiveness_cap
 
             #Compute other deparement effects
-            for person in self.supply_team:
-                if person in self.s_div.people: #Check to see if the person is in the room, otherwise don't count their progress (they are at home, dragged away by PC, weekend, etc.)
-                    self.supply_purchase(person.focus,person.charisma,person.supply_skill)
-                    person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("supply work"), add_to_log = False)
+            for person in [x for x in self.supply_team if x in self.s_div.people]:
+                self.supply_purchase(person.focus,person.charisma,person.supply_skill)
+                person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("supply work"), add_to_log = False)
 
-            for person in self.research_team:
-                if person in self.r_div.people:
-                    self.research_progress(person.int,person.focus,person.research_skill)
-                    person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("research work"), add_to_log = False)
+            for person in [x for x in self.research_team if x in self.r_div.people]:
+                self.research_progress(person.int,person.focus,person.research_skill)
+                person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("research work"), add_to_log = False)
 
-            for person in self.production_team:
-                if person in self.p_div.people:
-                    self.production_progress(person.focus,person.int,person.production_skill)
-                    person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("production work"), add_to_log = False)
+            for person in [x for x in self.production_team if x in self.p_div.people]:
+                self.production_progress(person.focus,person.int,person.production_skill)
+                person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("production work"), add_to_log = False)
 
             self.mark_autosale() #Mark extra serums to be sold by marketing.
 
-            for person in self.market_team:
-                if person in self.m_div.people:
-                    if person.should_wear_uniform():
-                        self.sale_progress(person.charisma,person.focus, person.market_skill, slut_modifier = person.outfit.slut_requirement) #If there is a uniform pass it's sluttiness along.
-                    else:
-                        self.sale_progress(person.charisma, person.focus, person.market_skill) #Otherwise their standard outfit provides no bonuses.
-                    person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("marketing work"), add_to_log = False)
+            for person in [x for x in self.market_team if x in self.m_div.people]:
+                if person.should_wear_uniform():
+                    self.sale_progress(person.charisma,person.focus, person.market_skill, slut_modifier = person.outfit.slut_requirement) #If there is a uniform pass it's sluttiness along.
+                else:
+                    self.sale_progress(person.charisma, person.focus, person.market_skill) #Otherwise their standard outfit provides no bonuses.
+                person.change_happiness(person.get_opinion_score("working")+person.get_opinion_score("marketing work"), add_to_log = False)
 
             for policy in self.active_policy_list:
                 policy.on_turn()
@@ -157,7 +274,7 @@ init -2 python:
 
         def run_day(self): #Run at the end of the day.
             #Pay everyone for the day
-            if mc.business.is_work_day():
+            if self.is_work_day():
                 cost = self.calculate_salary_cost()
                 self.funds += -cost
 
@@ -249,7 +366,7 @@ init -2 python:
             self.sales_made = 0
             self.serums_sold =0
 
-        def add_counted_message(self,message,new_count = 1):
+        def add_counted_message(self,message,new_count):
             if message in self.counted_message_list:
                 self.counted_message_list[message] += new_count
             else:
@@ -285,7 +402,7 @@ init -2 python:
             self.active_research_design = new_research
 
         def research_progress(self,int,focus,skill):
-            research_amount = __builtin__.round(((3*int) + (focus) + (2*skill) + 10) * (self.team_effectiveness))/100
+            research_amount = ((3*int) + (focus) + (2*skill) + 10) * (self.team_effectiveness / 100.0)
 
             if self.head_researcher:
                 bonus_percent = (self.head_researcher.int - 2)*0.05
@@ -297,6 +414,8 @@ init -2 python:
             else:
                 research_amount = research_amount * 0.9 #No head researcher is treated like int 0.
                 self.add_normal_message("No head researcher resulted in a 10% reduction in research produced! Assign a head researcher at R&D!")
+
+            research_amount = __builtin__.int( research_amount ) # round off values
 
             if self.active_research_design is not None:
                 the_research = self.active_research_design
@@ -346,18 +465,18 @@ init -2 python:
             amount_researched = self.research_progress(mc.int,mc.focus,mc.research_skill)
             self.listener_system.fire_event("general_work")
             self.listener_system.fire_event("player_research", amount = amount_researched)
-            renpy.say("","You spend time in the lab, experimenting with different chemicals and techniques and producing " + str(amount_researched) + " research points.")
+            renpy.say(None,"You spend time in the lab, experimenting with different chemicals and techniques and producing " + str(amount_researched) + " research points.")
             return amount_researched
 
         def player_buy_supplies(self):
             amount_bought = self.supply_purchase(mc.focus,mc.charisma,mc.supply_skill)
             self.listener_system.fire_event("general_work")
             self.listener_system.fire_event("player_supply_purchase", amount = amount_bought)
-            renpy.say("","You spend time securing new supplies for the lab, purchasing " + str(amount_bought) + " units of serum supplies.")
+            renpy.say(None,"You spend time securing new supplies for the lab, purchasing " + str(amount_bought) + " units of serum supplies.")
             return amount_bought
 
         def supply_purchase(self,focus,cha,skill):
-            max_supply = __builtin__.round(((3*focus) + (cha) + (2*skill) + 10) * (self.team_effectiveness))/100
+            max_supply = __builtin__.int( ((3*focus) + (cha) + (2*skill) + 10) * (self.team_effectiveness / 100.0) )
             max_supply = int(max_supply)
             if max_supply + self.supply_count > self.supply_goal:
                 max_supply = self.supply_goal - self.supply_count
@@ -373,7 +492,7 @@ init -2 python:
             amount_sold = self.sale_progress(mc.charisma,mc.focus,mc.market_skill)
             self.listener_system.fire_event("player_serums_sold_count", amount = amount_sold)
             self.listener_system.fire_event("general_work")
-            renpy.say("","You spend time making phone calls to clients and shipping out orders. You sell " + str(amount_sold) + " doses of serum.")
+            renpy.say(None,"You spend time making phone calls to clients and shipping out orders. You sell " + str(amount_sold) + " doses of serum.")
             return amount_sold
 
         def sale_progress(self,cha,focus,skill, slut_modifier = 0):
@@ -383,7 +502,7 @@ init -2 python:
                 sluttiness_multiplier = (slut_modifier/100.0) + 1
                 serum_value_multiplier = serum_value_multiplier * (sluttiness_multiplier)
 
-            multipliers_used = {} #Generate a dict with only the current max multipliers of each catagory.
+            multipliers_used = {} #Generate a dict with only the current max multipliers of each category.
             for multiplier_source in self.sales_multipliers:
                 if not multiplier_source[0] in multipliers_used:
                     multipliers_used[multiplier_source[0]] = multiplier_source[1]
@@ -398,8 +517,8 @@ init -2 python:
                 elif value_change < 1: #No message shown for exactly 1.
                     self.add_normal_message(str((value_change-1)*100) + "% serum value due to " + maxed_multiplier + ".") #Duplicate normal messages are not shown twice, so this should only exist once per turn, per multiplier.
 
-            serum_sale_count = __builtin__.round(((3*cha) + (focus) + (2*skill) + 5) * (self.team_effectiveness))/100 #Total number of doses of serum that can be sold by this person.
-            serum_sale_count = __builtin__.int(serum_sale_count)
+            #Total number of doses of serum that can be sold by this person.
+            serum_sale_count = __builtin__.int( ((3 * cha) + focus + (2 * skill) + 5) * (self.team_effectiveness / 100.0) )
             sorted_by_value = sorted(self.sale_inventory.serums_held, key = lambda serum: serum[0].value) #List of tuples [SerumDesign, count], sorted by the value of each design. Used so most valuable serums are sold first.
             if self.sale_inventory.get_any_serum_count() < serum_sale_count:
                 serum_sale_count = self.sale_inventory.get_any_serum_count()
@@ -439,7 +558,7 @@ init -2 python:
 
         def production_progress(self,focus,int,skill):
             #First, figure out how many production points we can produce total. Subtract that much supply and mark that much production down for the end of day report.
-            production_amount = __builtin__.round(((3*focus) + (int) + (2*skill) + 10) * (self.team_effectiveness))/100
+            production_amount = __builtin__.int( ((3*focus) + (int) + (2*skill) + 10) * (self.team_effectiveness / 100.0) )
             self.production_potential += production_amount
 
             if self.serum_production_array is None:
@@ -530,17 +649,17 @@ init -2 python:
             production_amount = self.production_progress(mc.focus,mc.int,mc.production_skill)
             self.listener_system.fire_event("player_production", amount = production_amount)
             self.listener_system.fire_event("general_work")
-            renpy.say("","You spend time in the lab synthesizing serum from the it's raw chemical precursors. You generate " + str(production_amount) + " production points.")
+            renpy.say(None,"You spend time in the lab synthesizing serum from the it's raw chemical precursors. You generate " + str(production_amount) + " production points.")
             return production_amount
 
         def player_hr(self):
             eff_amount = self.hr_progress(mc.charisma,mc.int,mc.hr_skill)
             self.listener_system.fire_event("player_efficiency_restore", amount = eff_amount)
             self.listener_system.fire_event("general_work")
-            renpy.say("","You settle in and spend a few hours filling out paperwork, raising company efficency by " + str(eff_amount )+ "%%.")
+            renpy.say(None,"You settle in and spend a few hours filling out paperwork, raising company efficiency by " + str(eff_amount )+ "%%.")
             return eff_amount
 
-        def hr_progress(self,cha,int,skill): #Don't compute efficency cap here so that player HR effort will be applied against any efficency drop even though it's run before the rest of the end of the turn.
+        def hr_progress(self,cha,int,skill): #Don't compute efficiency cap here so that player HR effort will be applied against any efficiency drop even though it's run before the rest of the end of the turn.
             restore_amount = (3*cha) + (int) + (2*skill) + 5
             self.team_effectiveness += restore_amount
             return restore_amount
@@ -552,47 +671,99 @@ init -2 python:
             elif self.team_effectiveness < 50:
                 self.team_effectiveness = 50
 
-        def add_employee_research(self, new_person):
-            self.research_team.append(new_person)
-            new_person.job = self.get_employee_title(new_person)
+        def update_employee_status(self, person):
+            if person.event_triggers_dict.get("employed_since", -1) == -1:
+                person.event_triggers_dict["employed_since"] = day
+                self.listener_system.fire_event("new_hire", the_person = person)
 
-        def add_employee_production(self, new_person):
-            self.production_team.append(new_person)
-            new_person.job = self.get_employee_title(new_person)
+            for other_employee in self.get_employee_list():
+                town_relationships.begin_relationship(person, other_employee) #They are introduced to everyone at work, with a starting value of "Acquaintance"
 
-        def add_employee_supply(self, new_person):
-            self.supply_team.append(new_person)
-            new_person.job = self.get_employee_title(new_person)
+        def move_person_to_division(self, person, division):
+            if not person in division.people:
+                if person in person.location.people:
+                    person.location.move_person(person, division)
+                else:
+                    division.add_person(person)
 
-        def add_employee_marketing(self, new_person):
-            self.market_team.append(new_person)
-            new_person.job = self.get_employee_title(new_person)
+        def add_employee_research(self, person, add_to_location = False):
+            if add_to_location:
+                self.move_person_to_division(person, self.r_div)
+            if not person in self.research_team:
+                self.research_team.append(person)
+            if not employee_role in person.special_role:
+                person.special_role.append(employee_role)
+            person.job = self.get_employee_title(person)
+            person.set_work(self.r_div)
+            self.update_employee_status(person)
 
-        def add_employee_hr(self, new_person):
-            self.hr_team.append(new_person)
-            new_person.job = self.get_employee_title(new_person)
+        def add_employee_production(self, person, add_to_location = False):
+            if add_to_location:
+                self.move_person_to_division(person, self.p_div)
+            if not person in self.production_team:
+                self.production_team.append(person)
+            if not employee_role in person.special_role:
+                person.special_role.append(employee_role)
+            person.job = self.get_employee_title(person)
+            person.set_work(self.p_div)
+            self.update_employee_status(person)
 
-        def remove_employee(self, the_person, remove_linked = False):
-            if the_person in self.research_team:
-                self.research_team.remove(the_person)
-            elif the_person in self.production_team:
-                self.production_team.remove(the_person)
-            elif the_person in self.supply_team:
-                self.supply_team.remove(the_person)
-            elif the_person in self.market_team:
-                self.market_team.remove(the_person)
-            elif the_person in self.hr_team:
-                self.hr_team.remove(the_person)
+        def add_employee_supply(self, person, add_to_location = False):
+            if add_to_location:
+                self.move_person_to_division(person, self.s_div)
+            if not person in self.supply_team:
+                self.supply_team.append(person)
+            if not employee_role in person.special_role:
+                person.special_role.append(employee_role)
+            person.job = self.get_employee_title(person)
+            person.set_work(self.s_div)
+            self.update_employee_status(person)
 
-            the_person.set_work(None)
-            the_person.remove_role(employee_role, remove_linked = remove_linked) #Some events only shuffle employees around, leaving employee related roles in place. For those, set remove_linked to True
+        def add_employee_marketing(self, person, add_to_location = False):
+            if add_to_location:
+                self.move_person_to_division(person, self.m_div)
+            if not person in self.market_team:
+                self.market_team.append(person)
+            if not employee_role in person.special_role:
+                person.special_role.append(employee_role)
+            person.job = self.get_employee_title(person)
+            person.set_work(self.m_div)
+            self.update_employee_status(person)
 
-            #Roles can have an on_remove function, but these have special events that we want to make sure are triggered properly.
-            if the_person == self.head_researcher:
-                renpy.call("fire_head_researcher", the_person) #Call the label we use for firing the person as a role action. This should trigger it any time you fire or move your head researcher.
+        def add_employee_hr(self, person, add_to_location = False):
+            if add_to_location:
+                self.move_person_to_division(person, self.h_div)
+            if not person in self.hr_team:
+                self.hr_team.append(person)
+            if not employee_role in person.special_role:
+                person.special_role.append(employee_role)
+            person.job = self.get_employee_title(person)
+            person.set_work(self.h_div)
+            self.update_employee_status(person)
 
-            if the_person == self.company_model:
-                renpy.call("fire_model_label", the_person)
+        def remove_employee(self, person, remove_linked = True):
+            if person in self.research_team:
+                self.research_team.remove(person)
+            if person in self.production_team:
+                self.production_team.remove(person)
+            if person in self.supply_team:
+                self.supply_team.remove(person)
+            if person in self.market_team:
+                self.market_team.remove(person)
+            if person in self.hr_team:
+                self.hr_team.remove(person)
+
+            person.set_work(None)
+
+            person.remove_role(employee_role, remove_linked = remove_linked)
+
+            if person is self.head_researcher:
+                self.fire_head_researcher()
+
+            if person is self.company_model:
+                self.fire_company_model()
+
+            self.listener_system.fire_event("fire_employee", the_person = person)
 
         def get_employee_list(self):
             return self.research_team + self.production_team + self.supply_team + self.market_team + self.hr_team
@@ -654,37 +825,60 @@ init -2 python:
             return employees_meeting_requirement
 
         def give_daily_serum(self):
-            for person in self.get_employee_list():
-                self.give_department_serum(person)
-
-        def give_department_serum(self, the_person):
-            the_serum = None
-            if the_person in self.research_team:
+            if self.r_serum:
                 the_serum = self.r_serum
-            elif the_person in self.market_team:
-                the_serum = self.m_serum
-            elif the_person in self.production_team:
-                the_serum = self.p_serum
-            elif the_person in self.supply_team:
-                the_serum = self.s_serum
-            elif the_person in self.hr_team:
-                the_serum = self.h_serum
-
-            if the_serum is not None:
-                should_give_serum = True
-                for active_serum in the_person.serum_effects:
-                    if the_serum.is_same_design(active_serum):
-                        if active_serum.duration - active_serum.duration_counter >= 3:
-                            should_give_serum = False #Don't double-dose girls if they have the serum running and it will last the work day already
-                            break
-
-                if should_give_serum:
+                for person in self.research_team:
                     if self.inventory.get_serum_count(the_serum) > 0:
                         self.inventory.change_serum(the_serum,-1)
-                        person.give_serum(copy.copy(the_serum), add_to_log = False)
+                        person.give_serum(copy.copy(the_serum), add_to_log = False) #use a copy rather than the main class, so we can modify and delete the effects without changing anything else.
                     else:
-                        the_message = "Stockpile out of " + the_serum.name + " to give to staff."
-                        self.add_counted_message(the_message)
+                        the_message = "Stockpile ran out of " + the_serum.name + " to give to the research division."
+                        if not the_message in self.message_list:
+                            self.add_normal_message(the_message)
+
+            if self.m_serum:
+                the_serum = self.m_serum
+                for person in self.market_team:
+                    if self.inventory.get_serum_count(the_serum) > 0:
+                        self.inventory.change_serum(the_serum,-1)
+                        person.give_serum(copy.copy(the_serum), add_to_log = False) #use a copy rather than the main class, so we can modify and delete the effects without changing anything else.
+                    else:
+                        the_message = "Stockpile ran out of " + the_serum.name + " to give to the marketing division."
+                        if not the_message in self.message_list:
+                            self.add_normal_message(the_message)
+
+            if self.p_serum:
+                the_serum = self.p_serum
+                for person in self.production_team:
+                    if self.inventory.get_serum_count(the_serum) > 0:
+                        self.inventory.change_serum(the_serum,-1)
+                        person.give_serum(copy.copy(the_serum), add_to_log = False) #use a copy rather than the main class, so we can modify and delete the effects without changing anything else.
+                    else:
+                        the_message = "Stockpile ran out of " + the_serum.name + " to give to the production division."
+                        if not the_message in self.message_list:
+                            self.add_normal_message(the_message)
+
+            if self.s_serum:
+                the_serum = self.s_serum
+                for person in self.supply_team:
+                    if self.inventory.get_serum_count(the_serum) > 0:
+                        self.inventory.change_serum(the_serum,-1)
+                        person.give_serum(copy.copy(the_serum), add_to_log = False) #use a copy rather than the main class, so we can modify and delete the effects without changing anything else.
+                    else:
+                        the_message = "Stockpile ran out of " + the_serum.name + " to give to the supply procurement division."
+                        if not the_message in self.message_list:
+                            self.add_normal_message(the_message)
+
+            if self.h_serum:
+                the_serum = self.h_serum
+                for person in self.hr_team:
+                    if self.inventory.get_serum_count(the_serum) > 0:
+                        self.inventory.change_serum(the_serum,-1)
+                        person.give_serum(copy.copy(the_serum), add_to_log = False) #use a copy rather than the main class, so we can modify and delete the effects without changing anything else.
+                    else:
+                        the_message = "Stockpile ran out of " + the_serum.name + " to give to the human resources division."
+                        if not the_message in self.message_list:
+                            self.add_normal_message(the_message)
 
         def advance_tutorial(self, tutorial_name):
             self.event_triggers_dict[tutorial_name] += 1 #advance our tutorial slot.
@@ -698,5 +892,27 @@ init -2 python:
 
         def remove_sales_multiplier(self, multiplier_class, multiplier):
             if [multiplier_class, multiplier] in self.sales_multipliers:
-                mc.log_event("No longer reciving " + str((multiplier - 1) * 100) + "% serum value increase from " + multiplier_class + ".", "float_text_grey")
+                mc.log_event("No longer receiving " + str((multiplier - 1) * 100) + "% serum value increase from " + multiplier_class + ".", "float_text_grey")
                 self.sales_multipliers.remove([multiplier_class, multiplier])
+
+        def hire_company_model(self, person):
+            if self.company_model:
+                self.fire_company_model()
+            self.company_model = person
+            person.special_role.append(company_model_role)
+
+        def fire_company_model(self):
+            if self.company_model:
+                self.company_model.special_role.remove(company_model_role)
+                self.company_model = None
+
+        def hire_head_researcher(self, person):
+            if self.head_researcher:
+                self.fire_head_researcher()
+            self.head_researcher = person
+            person.special_role.append(head_researcher)
+
+        def fire_head_researcher(self):
+            if self.head_researcher:
+                self.head_researcher.special_role.remove(head_researcher)
+                self.head_researcher = None

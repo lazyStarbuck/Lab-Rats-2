@@ -1,6 +1,7 @@
 init -2 python:
     class Person(renpy.store.object): #Everything that needs to be known about a person.
         global_character_number = 0 #This is increased for each character that is created.
+
         def __init__(self,name,last_name,age,body_type,tits,height,body_images,expression_images,hair_colour,hair_style,pubes_colour,pubes_style,skin,eyes,job,wardrobe,personality,stat_list,skill_list,
             sluttiness=0,obedience=0,suggest=0,sex_list=[0,0,0,0], love = 0, happiness = 100, home = None, work = None,
             font = "Avara.tff", name_color = "#ffffff", dialogue_color = "#ffffff",
@@ -13,23 +14,23 @@ init -2 python:
             ## Personality stuff, name, ect. Non-physical stuff.
             self.name = name
             self.last_name = last_name
-            self.character_number = Person.global_character_number #This is a gunique number for each character. Used as a tag when showing a character to identify if they are already drawn (and thus need to be hidden)
+
+            self.character_number = Person.global_character_number #This is a unique number for each character. Used as a tag when showing a character to identify if they are already drawn (and thus need to be hidden)
             Person.global_character_number += 1
 
             self.draw_number = defaultdict(int) #Used while drawing a character to avoid drawing an animation that has already been replaced with a new draw. Defaults to 0
 
             self.title = title #Note: We format these down below!
-            self.possessive_title = possessive_title #The way the girl is refered to in relation to you. For example "your sister", "your head researcher", or just their title again.
+            self.possessive_title = possessive_title #The way the girl is referred to in relation to you. For example "your sister", "your head researcher", or just their title again.
             if mc_title:
                 self.mc_title = mc_title #What they call the main character. Ie. "first name", "mr.last name", "master", "sir".
             else:
                 self.mc_title = "Stranger"
 
-            self.home = home #The room the character goes to at night. If none a ranjdom public location is picked.
+            self.home = home #The room the character goes to at night. If none a random public location is picked.
             self.work = work #The room the character goes to for work.
-            self.schedule = {}
-            for x in range(0,7):
-                self.schedule[x] = {0:home,1:None,2:None,3:None,4:home}
+            self.schedule = Schedule(home)
+
             #If there is a place in the schedule the character will go there. Otherwise they have free time and will do whatever they want.
             self.job = job
 
@@ -94,7 +95,7 @@ init -2 python:
                 what_style = "general_dialogue_style") #Used to describe everything that isn't character specific.
 
             if title: #Format the given titles, if any, so they appear correctly the first time you meet at person.
-                self.set_title(title) #The way the girl is refered to by the MC. For example: "Mrs. Whatever", "Lily", or "Mom". Will reset "???" if appropriate
+                self.set_title(title) #The way the girl is referred to by the MC. For example: "Mrs. Whatever", "Lily", or "Mom". Will reset "???" if appropriate
             else:
                 self.char.name = self.create_formatted_title("???")
             if possessive_title:
@@ -106,15 +107,15 @@ init -2 python:
             self.age = age
             self.body_type = body_type
             self.tits = tits
-            self.height = height * 0.8 #This is the scale factor for height, with the talest girl being 1.0 and the shortest being 0.8
+            self.height = height #This is the scale factor for height, with the tallest girl being 1.0 and the shortest being 0.8
             self.body_images = body_images #instance of Clothing class, which uses full body shots.
             self.face_style = face_style
-            self.expression_images = expression_images #instance of the Expression class, which stores facial expressions for different skin colours
+            #self.expression_images = expression_images #instance of the Expression class, which stores facial expressions for different skin colours
             self.hair_colour = hair_colour #A list of [description, color value], where colour value is a standard RGBA list.
             self.hair_style = hair_style
 
             if pubes_colour is None:
-                self.pubes_colour = get_darkened_colour(hair_colour[1], 0.07) #Unless otherwise specifified they are 10% darker than normal hair
+                self.pubes_colour = get_darkened_colour(hair_colour[1], 0.07) #Unless otherwise specified they are 10% darker than normal hair
             else:
                 self.pubes_colour = pubes_colour #generally hair colour but a little darker.
 
@@ -141,8 +142,6 @@ init -2 python:
                 self.special_role = special_role #Otherwise we've handed it a list
             else:
                 self.special_role = []
-                log_message("Person \"" + name + " " + last_name + "\" was handed an incorrect special role parameter.")
-
 
             self.on_room_enter_event_list = [] #Checked when you enter a room with this character. If an event is in this list and enabled it is run (and no other event is until the room is reentered)
                 # If handed a list of [action, positive_int], the integer is how many turns this action is kept around before being removed, triggered or not.
@@ -150,7 +149,6 @@ init -2 python:
                 # If handed a list of [action, positive_int], the integer is how many turns this action is kept around before being removed, triggered or not.
 
             self.event_triggers_dict = {} #A dict used to store extra parameters used by events, like how many days has it been since a performance review.
-            self.event_triggers_dict["employed_since"] = 0
 
             ##Mental stats##
             #Mental stats are generally fixed and cannot be changed permanently. Ranges from 1 to 5 at start, can go up or down (min 0)
@@ -185,8 +183,8 @@ init -2 python:
 
             ##Personality Stats##
             #Things like sugestability, that change over the course of the game when the player interacts with the girl
-            self.suggestibility = 0 + suggest #How quickly/efficently bleeding temporary sluttiness is turned into core sluttiness.
-            self.suggest_bag = [] #This will store a list of ints which are the different suggestion values fighting for control. Only the highest is used, maintained when serums are added and removed.
+            self.suggestibility = 0 + suggest #How quickly/efficiently bleeding temporary sluttiness is turned into core sluttiness.
+            self.suggest_bag = [] #This will store a list of hints which are the different suggestion values fighting for control. Only the highest is used, maintained when serums are added and removed.
 
             self.happiness = happiness #Higher happiness makes a girl less likely to quit and more willing to put up with you pushing her using obedience.
             self.love = love
@@ -195,15 +193,13 @@ init -2 python:
             self.obedience = 100 + obedience #How likely the girl is to listen to commands. Default is 100 (normal person), lower actively resists commands, higher follows them.
 
             #Situational modifiers are handled by events. These dicts and related functions provide a convenient way to avoid double contributions. Remember to clear your situational modifiers when you're done with them!!
-            self.situational_sluttiness = {} #A dict that stores a "situation" string and the corrisponding amount it is contributing to the girls sluttiness.
-            self.situational_obedience = {} #A dict that stores a "situation" string and a corrisponding amount that it has affected their obedience by.
+            self.situational_sluttiness = {} #A dict that stores a "situation" string and the corresponding amount it is contributing to the girls sluttiness.
+            self.situational_obedience = {} #A dict that stores a "situation" string and a corresponding amount that it has affected their obedience by.
 
             ##Sex Stats##
             #These are physical stats about the girl that impact how she behaves in a sex scene. Future values might include things like breast sensitivity, pussy tighness, etc.
             self.arousal = 0 #How actively horny a girl is, and how close she is to orgasm.
             self.max_arousal = 100 #Her maximum arousal. TODO: Keep this hidden until you make her cum the first time?
-
-            self.novelty = 100 #How novel this girl making you cum is. Breaking taboos and time increases it, the girl making you cum decreases it.
 
             ##Sex Skills##
             #These represent how skilled a girl is at different kinds of intimacy, ranging from kissing to anal. The higher the skill the closer she'll be able to bring you to orgasm (whether you like it or not!)
@@ -225,6 +221,8 @@ init -2 python:
             self.sex_record["Cum Covered"] = 0
             self.sex_record["Vaginal Creampies"] = 0
             self.sex_record["Anal Creampies"] = 0
+            self.sex_record["Fingered"] = 0
+            self.sex_record["Kissing"] = 0
 
             self.broken_taboos = [] #Taboos apply a penalty to the _first_ time you are trying to push some boundry (first time touching her pussy, first time seeing her tits, etc.), and trigger special dialogue when broken.
 
@@ -267,20 +265,69 @@ init -2 python:
 
 
         def generate_home(self, set_home_time = True): #Creates a home location for this person and adds it to the master list of locations so their turns are processed.
-            if self.home is None:
-                start_home = Room(self.name+"'s home", self.name+"'s home", [], standard_bedroom_backgrounds[:], [],[],[],False,[0.5,0.5], visible = False, hide_in_known_house_map = False, lighting_conditions = standard_indoor_lighting)
-                #start_home.link_locations_two_way(downtown)
+            # generate new home location if we don't have one
+            start_home = self.home
+            if not start_home:
+                start_home = Room(self.name + " " + self.last_name + " home", self.name + " " + self.last_name + " home", [], standard_house_backgrounds, [make_wall(), make_floor(), make_couch(), make_window()],[],[],False,[0.5,0.5], visible = False, hide_in_known_house_map = False, lighting_conditions = standard_indoor_lighting)
 
-                start_home.add_object(make_wall())
-                start_home.add_object(make_floor())
-                start_home.add_object(make_bed())
-                start_home.add_object(make_window())
-
-                self.home = start_home
-                if set_home_time:
-                    self.set_schedule(start_home, times = [0,4])
+            # add home location to list of places, before assignment
+            if not start_home in list_of_places:
                 list_of_places.append(start_home)
+
+            self.home = start_home
+
+            if set_home_time:
+                self.set_schedule(the_location = self.home, times = [0,4])
             return self.home
+
+        @property
+        def identifier(self):
+            if not hasattr(self, "_identifier"):
+                self._identifier = hashlib.md5(self.name + self.last_name + str(self.age)).hexdigest()
+            return self._identifier
+
+        @property
+        def location(self): # Check what location a person is in e.g the_person.location == downtown. Use to trigger events?
+            location = next((x for x in list_of_places if self in x.people), None)
+            return (location if location else self.home) # fallback location for person is home
+
+        @property
+        def expression_images(self):
+            global emotion_images_dict
+            return emotion_images_dict[self.skin][self.face_style]
+
+        @property
+        def home(self):
+            if not hasattr(self, "_home"):
+                self._home = None
+            return next((x for x in list_of_places if x.identifier == self._home), None)
+
+        @home.setter
+        def home(self, value):
+            if isinstance(value, Room):
+                self._home = value.identifier
+            else:
+                self._home = None
+
+        @property
+        def work(self):
+            if not hasattr(self, "_work"):
+                self._work = None
+            return next((x for x in list_of_places if x.identifier == self._work), None)
+
+        @work.setter
+        def work(self, value):
+            if isinstance(value, Room):
+                self._work = value.identifier
+            else:
+                self._work = None
+
+        def has_limited_time_event(self, the_event):
+            if isinstance(the_event, Action):
+                return any(x for x in self.on_room_enter_event_list + self.on_talk_event_list if x == the_event)
+            if isinstance(the_event, basestring):
+                return any(x for x in self.on_room_enter_event_list + self.on_talk_event_list if x.effect == the_event)
+            return False
 
         def generate_daughter(self, force_live_at_home = False): #Generates a random person who shares a number of similarities to the mother
             age = renpy.random.randint(18, self.age-16)
@@ -341,14 +388,12 @@ init -2 python:
 
 
         def run_turn(self):
-            self.change_energy(20, add_to_log = False)
+            self.change_energy(self.max_energy * .2, add_to_log = False)
             self.bleed_slut() #if our sluttiness is over our core slut, bleed some off and, if we have suggest, turn it into core slut.
-
-
 
             remove_list = []
             for serum in self.serum_effects: #Compute the effects of all of the serum that the girl is under.
-                serum.run_on_turn(self) #Run the serum's on_turn funcion if it has one.
+                serum.run_on_turn(self) #Run the serum's on_turn function if it has one.
                 if serum.duration_expired(): #Returns true if the serum effect is suppose to expire in this time, otherwise returns false. Always updates duration counter when called.
                     remove_list.append(serum) #Use a holder "remove" list to avoid modifying list while iterating.
 
@@ -382,13 +427,13 @@ init -2 python:
                 self.apply_outfit(self.planned_outfit)
                 self.planned_uniform = None
 
-            destination = self.get_desination() #None destination means they have free time
+            destination = self.get_destination() #None destination means they have free time
             if destination == self.work and not mc.business.is_open_for_business():
                 destination = None #TODO: We can now do day-of-the-week scheduling, so this is no longer needed.
 
             if destination is not None: #We have somewhere scheduled to be for this time chunk. Let's move over there.
                 location.move_person(self, destination) #Always go where you're scheduled to be.
-                if self.get_desination() == self.work: #We're going to work.
+                if self.get_destination() == self.work: #We're going to work.
                     if self.should_wear_uniform(): #Get a uniform if we should be wearing one.
                         self.wear_uniform()
                         self.change_happiness(self.get_opinion_score("work uniforms"),add_to_log = False)
@@ -403,11 +448,7 @@ init -2 python:
             else:
                 #She finds somewhere to burn some time
                 self.apply_outfit(self.planned_outfit)
-                available_locations = [] #Check to see where is public (or where you are white listed) and move to one of those locations randomly
-                for potential_location in list_of_places:
-                    if potential_location.public:
-                        available_locations.append(potential_location)
-                location.move_person(self, get_random_from_list(available_locations))
+                location.move_person(self, get_random_from_list([x for x in list_of_places if x.public]))
 
             #We do uniform/outfit checks in run move because it happens at the _start_ of the time chunk. The girl looks forward to wearing her outfit (or dreads it) rather than responds to actually doing it.
             if self.outfit and self.planned_outfit.slut_requirement > self.sluttiness*0.75: #A skimpy outfit is defined as the top 25% of a girls natural sluttiness.
@@ -433,31 +474,30 @@ init -2 python:
                 self.change_slut_temp(self.get_opinion_score("showing her ass"), add_to_log = False)
 
             for event_list in [self.on_room_enter_event_list, self.on_talk_event_list]: #Go through both of these lists and curate them, ie trim out events that should have expired.
-                removal_list = [] #So we can iterate through without removing and damaging the list.
-                for an_action in event_list:
-                    if isinstance(an_action, Limited_Time_Action): #It's a LTA holder, so it has a turn counter
-                        an_action.turns_valid += -1
+                removal_list_index = [] #So we can iterate through without removing and damaging the list.
+                for an_index, an_action in enumerate(event_list):
+                    if isinstance(an_action, Limited_Time_Action): #It's a LTA holder, so it has a turn counter only count down when active
+                        an_action.turns_valid -= 1
                         if an_action.turns_valid <= 0:
-                            removal_list.append(an_action)
+                            removal_list_index.append(an_index)
 
-                for action_to_remove in removal_list:
-                    event_list.remove(action_to_remove)
+                removal_list_index.reverse()
+                for action_index_to_remove in removal_list_index:
+                    del event_list[action_index_to_remove]
 
             for a_role in self.special_role:
                 a_role.run_move(self)
 
 
-
         def run_day(self): #Called at the end of the day.
             #self.outfit = self.wardrobe.decide_on_outfit(self.sluttiness) #Put on a new outfit for the day!
 
-            self.change_energy(60, add_to_log = False)
             self.change_novelty(1, add_to_log = False)
-
+            self.change_energy(self.max_energy * .6, add_to_log = False)
             if self.arousal > (self.max_arousal/2): #TODO: Have this trigger an LTE where girls might be getting off when you walk in.
                 self.arousal = __builtin__.int(self.arousal/2) # If her arousal is high she masturbates at night, generating a small amount of sluttiness
                 self.change_slut_temp(1, add_to_log = False)
-                self.change_happiness(5*self.get_opinion_score("masturbating"), add_to_log = False)
+                self.change_happiness(5 * self.get_opinion_score("masturbating"), add_to_log = False)
 
             #Now we will normalize happiness towards 100 over time. Every 5 points of happiness above or below 100 results in a -+1 per time chunk, rounded towards 0.
             hap_diff = self.happiness - 100
@@ -483,19 +523,19 @@ init -2 python:
 
 
             if day%7 == 0: #If the new day is Monday
-                self.change_happiness(self.get_opinion_score("Mondays")*10, add_to_log = False)
+                self.change_happiness(self.get_opinion_score("Mondays")*5, add_to_log = False)
 
-            elif day%7 == 5: #If the new day is Friday
-                self.change_happiness(self.get_opinion_score("Fridays")*10, add_to_log = False)
+            elif day%7 == 4: #If the new day is Friday
+                self.change_happiness(self.get_opinion_score("Fridays")*5, add_to_log = False)
 
-            elif day%7 == 6 or day%7 == 7: #If the new day is a weekend day
-                self.change_happiness(self.get_opinion_score("the weekend")*10, add_to_log = False)
+            elif day%7 == 5 or day%7 == 6: #If the new day is a weekend day
+                self.change_happiness(self.get_opinion_score("the weekend")*5, add_to_log = False)
 
             for a_role in self.special_role:
                 a_role.run_day(self)
 
 
-        def build_person_displayable(self,position = None, emotion = None, special_modifier = None, lighting = None, background_fill = "#0026a5", no_frame = False): #Encapsulates what is done when drawing a person and produces a single displayable.
+        def build_person_displayable(self,position = None, emotion = None, special_modifier = None, lighting = None, background_fill = "#0026a5", no_frame = False, hide_list = []): #Encapsulates what is done when drawing a person and produces a single displayable.
             if position is None:
                 position = self.idle_pose #Easiest change is to call this and get a random standing posture instead of a specific idle pose. We redraw fairly frequently so she will change position frequently.
 
@@ -508,14 +548,16 @@ init -2 python:
             if forced_special_modifier is not None:
                 special_modifier = forced_special_modifier # Overrides all other things, supports people with ball gags always having an open mouth (mechanically, not emotionally)
 
-            x_size = position_size_dict.get(position)[0]
-            y_size = position_size_dict.get(position)[1]
+            if not persistent.vren_animation:
+                background_fill = None
+
+            x_size, y_size = position_size_dict.get(position)
 
             displayable_list.append(self.body_images.generate_item_displayable(self.body_type,self.tits,position,lighting)) #Add the body displayable
             displayable_list.append(self.expression_images.generate_emotion_displayable(position,emotion, special_modifier = special_modifier, eye_colour = self.eyes[1], lighting = lighting)) #Get the face displayable
             displayable_list.append(self.pubes_style.generate_item_displayable(self.body_type,self.tits, position, lighting = lighting)) #Add in her pubes. #TODO: See if we need to mask this with her body profile for particularly bush-y bushes to prevent clothing overflow.
 
-            displayable_list.extend(self.outfit.generate_draw_list(self,position,emotion,special_modifier, lighting = lighting)) #Get the displayables for everything we wear. Note that extnsions do not return anything because they have nothing to show.
+            displayable_list.extend(self.outfit.generate_draw_list(self,position,emotion,special_modifier, lighting = lighting, hide_layers = hide_list)) #Get the displayables for everything we wear. Note that extnsions do not return anything because they have nothing to show.
             displayable_list.append(self.hair_style.generate_item_displayable("standard_body",self.tits,position, lighting = lighting)) #Get hair
             #NOTE: Positional modifiers like xanchor that expect pixles need to be given ints, they do not auto convert from floats.
 
@@ -539,25 +581,17 @@ init -2 python:
             return final_image
 
         def prepare_animation_screenshot_render(self, position, emotion, special_modifier, lighting, background_fill, given_reference_draw_number, draw_layer):
-            log_message(self.name + " | PREP | " + str(time.time()))
             if background_fill is None:
                 background_fill = "#0026a5"
-
 
             the_displayable = self.build_person_displayable(position, emotion, special_modifier, lighting, background_fill, no_frame = True)
             if the_displayable is None:
                 renpy.notify("NONE IMAGE ERROR!")
 
-
-
-            x_size = position_size_dict.get(position)[0]
-            y_size = position_size_dict.get(position)[1]
-            log_message(self.name + " | DISB | " + str(time.time()))
-            the_render = the_displayable.render(x_size,y_size,0,0)
-            log_message(self.name + " | REND | " + str(time.time()))
+            x_size, y_size = position_size_dict.get(position)
 
             global prepared_animation_render
-            prepared_animation_render[draw_layer][self.character_number] = the_render
+            prepared_animation_render[draw_layer][self.character_number] = the_displayable.render(x_size,y_size,0,0)
 
             global animation_draw_requested
             animation_draw_requested[draw_layer].append([self, given_reference_draw_number])
@@ -581,7 +615,6 @@ init -2 python:
         def draw_person_animation(self, the_surface, the_animation, position, emotion, special_modifier, lighting, background_fill = None, animation_effect_strength = 1.0, show_person_info = True, draw_reference_number = None,
             draw_layer = "solo", display_transform = None, extra_at_arguments = None, display_zorder = None, clear_active = True): #Note: clear_active needs to be the last parameter here for the animation call to properly insert it as a parameter.
 
-            log_message(self.name + " | ASTR | " + str(time.time()))
             if display_zorder is None:
                 display_zorder = 0
 
@@ -607,15 +640,9 @@ init -2 python:
 
             surface_file = io.BytesIO()
             the_surface = the_surface.subsurface((0,0,(x_size/x_scale),(y_size/y_scale))) # Take a subsurface of the surface screenshotted, so that we only save what is strictly nessesary.
-
-            log_message(self.name + " | ACP1 | " + str(time.time()))
-            #TODO: Check if we can use display.pgrender.load_image(file, filename) to load the surface data without needing to screenshot it somehow.
             renpy.display.module.save_png(the_surface, surface_file, 0) #This is a relatively time expensive operation, taking 0.12 to 0.14 seconds to perform. #TODO: Retest how long this takes with the trimmed surface
             static_image = im.Data(surface_file.getvalue(), "animation_temp_image.png")
             surface_file.close()
-
-
-            log_message(self.name + " | ACP2 | " + str(time.time()))
 
             scaled_image = im.FactorScale(static_image, x_scale, y_scale)
 
@@ -646,11 +673,7 @@ init -2 python:
             animation_uniforms = the_animation.uniforms #Copy the default uniforms for the animation
             animation_uniforms["animation_strength"] = animation_effect_strength
 
-            log_message(self.name + " | MASK | " + str(time.time()))
-
             raw_animated_displayable = ShaderDisplayable(shader.MODE_2D, scaled_image, the_image_name, shader.VS_2D, the_animation.shader,{"tex1":mask_image}, animation_uniforms, None, None, mask_name = mask_image_name)
-
-            log_message(self.name + " | DISP | " + str(time.time()))
 
             cropped_animated_displayable = Crop((0,0,x_size,y_size), raw_animated_displayable)
             framed_animated_displayable = Composite((x_size,y_size),(0,0),cropped_animated_displayable,(0,0),Frame("/gui/Character_Window_Frame.png", 12, 12))
@@ -678,11 +701,9 @@ init -2 python:
                 character_tag += "_extra" #Allows for two varients of teh same character to be drawn, useful when fading from one to another to show clothing being removed.
 
             renpy.show(character_tag,at_list=at_list_arguments,layer=draw_layer,what=framed_animated_displayable,zorder=display_zorder, tag=character_tag)
-            log_message(self.name + " | Anim | " + str(time.time()))
 
         def draw_person(self,position = None, emotion = None, special_modifier = None, show_person_info = True, lighting = None, background_fill = "#0026a5", the_animation = None, animation_effect_strength = 1.0,
             draw_layer = "solo", display_transform = None, extra_at_arguments = None, display_zorder = None, wipe_scene = True): #Draw the person, standing as default if they aren't standing in any other position
-            log_message(self.name + " | Start | " + str(time.time()))
 
             if position is None:
                 position = self.idle_pose #Easiest change is to call this and get a random standing posture instead of a specific idle pose. We redraw fairly frequently so she will change position frequently.
@@ -721,7 +742,6 @@ init -2 python:
                 clear_scene() #Make sure no other characters are drawn either.
 
             renpy.show(character_tag, at_list=at_arguments, layer=draw_layer, what=character_image, zorder = display_zorder, tag=character_tag) #Display a static image of the character as soon as possible
-            log_message(self.name + " | Flat | " + str(time.time()))
             if show_person_info:
                 renpy.show_screen("person_info_ui",self)
 
@@ -954,9 +974,6 @@ init -2 python:
                     display_name = self.title
                 if add_to_log:
                     mc.log_event(" Taboo broken with " + display_name + "!", "float_text_red")
-
-                self.change_novelty(5, add_to_log)
-
                 return True
             return False
 
@@ -996,6 +1013,11 @@ init -2 python:
 
         def apply_outfit(self, the_outfit = None, ignore_base = False, update_taboo = False): #Hand over an outfit, we'll take a copy and apply it to the person, along with their base accessories unless told otherwise.
             if the_outfit is None:
+                # put on uniform if required
+                if self.should_wear_uniform():
+                    self.wear_uniform()
+                    return
+
                 the_outfit = self.planned_outfit
                 if the_outfit is None:
                     return #We don't have a planned outfit, so trying to return to it makes no sense.
@@ -1023,7 +1045,7 @@ init -2 python:
 
         def give_serum(self,the_serum_design, add_to_log = True): ##Make sure you are passing a copy of the serum, not a reference.
             self.serum_effects.append(the_serum_design)
-            the_serum_design.run_on_apply(self)
+            the_serum_design.run_on_apply(self, add_to_log)
 
         def is_under_serum_effect(self):
             if self.serum_effects:
@@ -1057,7 +1079,7 @@ init -2 python:
                     mc.log_event(self.title + ": Suggestibility increased, now " + str(amount), "float_text_blue")
             else:
                 if add_to_log and amount != 0 and self.title:
-                    mc.log_event(self.title + ": Suggestiblity " + str(amount) + " lower than current " + str(self.suggestibility) + " amount. Suggestibility unchanged.", "float_text_blue")
+                    mc.log_event(self.title + ": Suggestibility " + str(amount) + " lower than current " + str(self.suggestibility) + " amount. Suggestibility unchanged.", "float_text_blue")
             self.suggest_bag.append(amount) #Add it to the bag, so we can check to see if it is max later.
 
 
@@ -1119,7 +1141,7 @@ init -2 python:
                 self.sluttiness += amount
                 return_report = "+" + str(amount) + " Sluttiness"
 
-                # We're experimenting with uncapping the sluttiness and having sluttiness in excess of your suggestability cap bleed off quickly and inefficently.
+                # We're experimenting with uncapping the sluttiness and having sluttiness in excess of your suggestability cap bleed off quickly and inefficiently.
                 # if self.sluttiness > self.core_sluttiness + self.suggestibility + 10:
                 #     self.sluttiness = self.core_sluttiness + self.suggestibility + 10 #Set it to our max.
                 #     return_report = "Sluttiness Cap Reached." #If we hit the cap, let them know that instead of the numeric amount.
@@ -1193,7 +1215,7 @@ init -2 python:
         def bleed_slut(self): #Reduce temp slut in order to increase core slut at a ratio determined by the suggest score.
             if self.sluttiness > self.core_sluttiness: #We need to bleed away sluttiness.
                 if self.suggestibility == 0 and self.title: #TODO: think about how much we need this now.
-                    mc.business.add_normal_message(self.title + " has a sluttiness higher then her core sluttiness. Raising her suggestibility with serum will turn temporary sluttiness into core sluttiness more quickly and efficently!")
+                    mc.business.add_normal_message(self.title + " has a sluttiness higher then her core sluttiness. Raising her suggestibility with serum will turn temporary sluttiness into core sluttiness more quickly and efficiently!")
 
                 if self.sluttiness > self.core_sluttiness + self.suggestibility:
                     #We need to bleed a lot because our suggestibility dropped.
@@ -1202,7 +1224,7 @@ init -2 python:
                         difference = 5
 
                     if renpy.random.randint(1,5) <= difference: #ie. there's a 20% chance per point over to increase it by a point.
-                        self.change_slut_core(1, add_to_log = False) #We're experimenting with sluttiness above your suggestability amount converting inefficently (instead of not at all)
+                        self.change_slut_core(1, add_to_log = False) #We're experimenting with sluttiness above your suggestability amount converting inefficiently (instead of not at all)
                     self.change_slut_temp(-difference, add_to_log = False)
 
                 # self.change_slut_temp(-3, add_to_log = False) #We're experimenting with only lowering the temporary sluttiness when the core sluttiness goes up.
@@ -1309,18 +1331,12 @@ init -2 python:
                 if draw_person:
                     self.draw_person()
 
-
-            #if dialogue:
-                #TODO: Have this call a dialogue branch
-                #self.call_uniform_review() #TODO: actually impliment this call, but only when her outfit significantly differs from the real uniform.
-
             elif not self.judge_outfit(self.outfit):
                 self.apply_outfit()
                 if dialogue:
                     self.call_dialogue("clothing_review")
                 if draw_person:
                     self.draw_person()
-
 
         def judge_outfit(self,outfit, temp_sluttiness_boost = 0, use_taboos = True, as_underwear = False, as_overwear = False): #Judge an outfit and determine if it's too slutty or not. Can be used to judge other people's outfits to determine if she thinks they look like a slut.
             # temp_sluttiness can be used in situations (mainly crises) where an outfit is allowed to be temporarily more slutty than a girl is comfortable wearing all the time.
@@ -1423,12 +1439,14 @@ init -2 python:
             return False
 
         def should_wear_uniform(self):
+            if not mc.business.is_open_for_business():  # quick exit
+                return False
+
             #Check to see if we are: 1) Employed by the PC. 2) At work right now. 3) there is a uniform set for our department.
             employment_title = mc.business.get_employee_title(self)
             if employment_title != "None":
-                if mc.business.is_open_for_business(): #We should be at work right now, so if there is a uniform we should wear it.
-                    if mc.business.get_uniform_wardrobe(employment_title).get_count() > 0 or self.event_triggers_dict.get("forced_uniform", False): #Check to see if there's anything stored in the uniform section.
-                        return True
+                if mc.business.get_uniform_wardrobe(employment_title).get_count() > 0 or self.event_triggers_dict.get("forced_uniform", False): #Check to see if there's anything stored in the uniform section.
+                    return True
 
             return False #If we fail to meet any of the above conditions we should return false.
 
@@ -1461,8 +1479,10 @@ init -2 python:
 
             if persistent.pregnancy_pref == 0:
                 no_condom_threshold += 10 #If pregnancy content is being ignored we return to the baseline of 60
-            elif the_person.on_birth_control: #If there is pregnancy content then a girl is less likely to want a condom when using BC, much more likely to want it when not using BC.
+            elif pregnant_role in self.special_role and self.event_triggers_dict.get("preg_knows", False): # Is pregnant and knows, it so she doesn't mind doing it without
                 no_condom_threshold -= 20
+            elif not self.on_birth_control: # much more likely to want it when not using BC.
+                no_condom_threshold += 20
 
             return no_condom_threshold
 
@@ -1489,7 +1509,7 @@ init -2 python:
                 return True
 
         def change_arousal(self,amount, add_to_log = True):
-            self.arousal += int(__builtin__.round(amount)) #Round it to an integer if it isn't one already.
+            self.arousal += __builtin__.round(amount) #Round it to an integer if it isn't one already.
             if self.arousal < 0:
                 self.arousal = 0
 
@@ -1505,26 +1525,6 @@ init -2 python:
 
             if add_to_log and amount != 0:
                 mc.log_event(log_string, "float_text_red")
-
-        def change_novelty(self, amount, add_to_log = True):
-            amount = int(__builtin__.round(amount))
-
-            log_string = ""
-            display_name = self.create_formatted_title("???")
-            if self.title:
-                display_name = self.title
-
-            if amount + self.novelty > 100:
-                amount = 100 - self.novelty
-            elif amount + self.novelty < 0:
-                amount = self.novelty
-            if amount > 0:
-                log_string = display_name + ": +" + str(amount) + " Novelty"
-            else:
-                log_string = display_name + ": " + str(amount) + " Novelty" #TODO: Design a novelty token
-
-            if add_to_log and amount != 0:
-                mc.log_event(log_string, "float_text_yellow")
 
         def reset_arousal(self):
             self.arousal = 0
@@ -1578,22 +1578,22 @@ init -2 python:
 
         def wants_creampie(self): #Returns True if the girl is going to use dialogue where she wants you to creampie her, False if she's going to be angry about it. Used to help keep dialogue similar throughout events
             creampie_threshold = 75
-            effective_slut = the_person.effective_sluttiness("creampie") + (10*the_person.get_opinion_score("creampies"))
-            if the_person.on_birth_control:
+            effective_slut = self.effective_sluttiness("creampie") + (10*self.get_opinion_score("creampies"))
+            if self.on_birth_control:
                 effective_slut += -20 #Much more willing to let you creampie her if she's on BC
 
-            if affair_role in the_person.special_role:
-                effective_slut += 5 - (10 * the_person.get_opinion_score("cheating on men"))
-            elif the_person.relationship != "Single": # Less likely to want to be creampied if she's in a relationship, but cares less if you're officially cheating.
-                effective_slut += 15 - (10 * the_person.get_opinion_score("cheating on men"))
+            if affair_role in self.special_role:
+                effective_slut += 5 - (10 * self.get_opinion_score("cheating on men"))
+            elif self.relationship != "Single": # Less likely to want to be creampied if she's in a relationship, but cares less if you're officially cheating.
+                effective_slut += 15 - (10 * self.get_opinion_score("cheating on men"))
 
-            if girlfriend_role in the_person.special_role:
-                effective_slut += -(10 + (5*the_person.get_opinion_score("being submissive"))) #Desire to be a "good wife"
+            if girlfriend_role in self.special_role:
+                effective_slut += -(10 + (5*self.get_opinion_score("being submissive"))) #Desire to be a "good wife"
 
-            if the_person.is_family():
-                effective_slut += 10 - (10 * the_person.get_opinion_score("incest"))
+            if self.is_family():
+                effective_slut += 10 - (10 * self.get_opinion_score("incest"))
 
-            if effective_slut >= creampie_threshold or the_person.event_triggers_dict.get("preg_knows", False):
+            if effective_slut >= creampie_threshold or self.event_triggers_dict.get("preg_knows", False):
                 return True
 
             return False
@@ -1669,7 +1669,7 @@ init -2 python:
 
             slut_change_amount = 5*self.get_opinion_score("creampies")
 
-            if the_person.wants_creampie():
+            if self.wants_creampie():
                 self.change_happiness(5*self.get_opinion_score("creampies"))
             else:
                 self.change_happiness(-5 + (5*self.get_opinion_score("creampies")))
@@ -1681,9 +1681,11 @@ init -2 python:
 
             if add_to_record:
                 self.sex_record["Vaginal Creampies"] += 1
+            if "report_log" in globals():
+                report_log["creampies"] = report_log.get("creampies", 0) + 1
 
             # Pregnancy Check #
-            if persistent.pregnancy_pref > 0 and pregnant_role not in self.special_role:
+            if persistent.pregnancy_pref > 0 and not pregnant_role in self.special_role:
                 if persistent.pregnancy_pref == 1 and self.on_birth_control: #Establish how likely her birth contorl is to work (if needed, and if present)
                     bc_percent = 100 - self.bc_penalty
                 elif persistent.pregnancy_pref == 2 and self.on_birth_control:
@@ -1698,7 +1700,7 @@ init -2 python:
                 else:
                     modified_fertility = self.fertility_percent
 
-                if preg_chance < modified_fertility and pregnant_role not in self.special_role: #There's a chance she's pregnant
+                if preg_chance < modified_fertility:
                     if bc_chance >= bc_percent : # Birth control failed to prevent the pregnancy
                         become_pregnant(self) #Function in role_pregnant establishes all of the pregnancy related variables and events.
 
@@ -1710,12 +1712,14 @@ init -2 python:
                 the_cumshot = creampie_cum.get_copy()
                 the_cumshot.layer = 0
                 self.outfit.add_accessory(the_cumshot)
-            self.change_slut_temp(5*self.get_opinion_score("creampies"))
-            self.change_happiness(5*self.get_opinion_score("creampies"))
-            self.discover_opinion("creampies")
+            self.change_slut_temp(5*self.get_opinion_score("anal creampies"))
+            self.change_happiness(5*self.get_opinion_score("anal creampies"))
+            self.discover_opinion("anal creampies")
 
             if add_to_record:
                 self.sex_record["Anal Creampies"] += 1
+            if "report_log" in globals():
+                report_log["anal creampies"] = report_log.get("anal creampies", 0) + 1
 
         def cum_on_face(self, add_to_record = True):
             if self.outfit.can_add_accessory(face_cum):
@@ -1817,7 +1821,6 @@ init -2 python:
                     for the_time in range(0,5):
                         if self.schedule[the_day][the_time] == self.work:
                             self.schedule[the_day][the_time] = None
-
             else:
                 self.set_schedule(the_location, work_days, work_times) #Set them to work M-F, morning till afternoon
 
@@ -1833,7 +1836,7 @@ init -2 python:
                 for time_chunk in times:
                     self.schedule[the_day][time_chunk] = the_location
 
-        def get_desination(self, specified_day = None, specified_time = None):
+        def get_destination(self, specified_day = None, specified_time = None):
             if specified_day is None:
                 specified_day = day%7 #Today
             if specified_time is None:
@@ -1852,8 +1855,7 @@ init -2 python:
                 for act in role.actions:
                     if act.is_action_enabled(self) or act.is_disabled_slug_shown(self): #We should also check if a non-action disabled slug would be available so that the player can check what the requirement would be.
                         count += 1
-                return count
-
+            return count
 
         def create_formatted_title(self, the_title):
             formatted_title = "{color=" + self.char.who_args["color"] + "}" + "{font=" + self.char.what_args["font"] + "}" + the_title + "{/font}{/color}"

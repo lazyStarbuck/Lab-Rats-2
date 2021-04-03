@@ -28,29 +28,31 @@ init -2 python:
             else:
                 self.dependant_policies = dependant_policies # Otherwise we have a list already.
 
-            self.depender_policies = [] #These policies depend _on_ us, and are declared when other policies are defined. If they are on, we cannot toggle off.
+            self.depender_policies = MappedList(Policy, all_policies_in_the_game) #These policies depend _on_ us, and are declared when other policies are defined. If they are on, we cannot toggle off.
             for policy in self.dependant_policies:
                 policy.depender_policies.append(self) #Esentially builds a two way linked list of policies while allowing us to only define the requirements from the base up. Also conveniently stops dependency cycles from forming.
 
 
         def __cmp__(self,other): #
-            if type(other) is Policy:
+            if isinstance(other, Policy):
                 if self.name == other.name and self.desc == other.desc and self.cost == other.cost:
                     return 0
-                else:
-                    if self.__hash__() < other.__hash__(): #Use hash values to break ties.
-                        return -1
-                    else:
-                        return 1
 
+            if other is None:
+                return -1
+            elif self.__hash__() < other.__hash__(): #Use hash values to break ties.
+                return -1
             else:
-                if self.__hash__() < other.__hash__(): #Use hash values to break ties.
-                    return -1
-                else:
-                    return 1
+                return 1
 
         def __hash__(self):
             return hash((self.name,self.desc,self.cost))
+
+        @property
+        def identifier(self):
+            if not hasattr(self, "_identifier"):
+                self._identifier = hashlib.md5(self.name + self.desc).hexdigest()
+            return self._identifier
 
         def is_owned(self):
             if self in mc.business.policy_list:
@@ -66,7 +68,7 @@ init -2 python:
 
         def is_toggleable(self):
             return_toggle = True
-            if self.is_owned and self.toggleable: #If a policy is supposed to be toggleable:
+            if self.is_owned and self.toggleable: #If a policy is suppose to be toggleable:
                 if self in mc.business.active_policy_list: # We are currently active, so we are only disable-able if all of the dependers are off.
                     for policy in self.depender_policies:
                         if policy.is_active(): #If any of the policies that rely on this are active we cannot toggle off.

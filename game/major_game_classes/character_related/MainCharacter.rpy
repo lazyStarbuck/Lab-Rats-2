@@ -6,6 +6,7 @@ init -2 python:
             self.last_name = last_name
             self.energy = 50
             self.designed_wardrobe = Wardrobe("Designed Wardrobe")
+            self.money = 100 ## Personal money that can be spent however you wish. Company funds are seperate (but can be manipulated in your favour)
             self.business = business
             self.inventory = SerumInventory([])
 
@@ -51,21 +52,21 @@ init -2 python:
             self.condom = False #True if you currently have a condom on. (maintained by sex scenes). TODO: Allow a third "broken" state and add dialgoue and descriptions for that.
             self.recently_orgasmed = False #If True you recently orgasmsed and aren't hard until your arousal rises to 10 or the encounter ends.
 
-            self.known_home_locations = [] #When the MC learns a character's home location the room reference should be added here. They can then get to it from the map.
+            self.known_home_locations = MappedList(Room, all_locations_in_the_game) #When the MC learns a character's home location the room reference should be added here. They can then get to it from the map.
 
             self.having_text_conversation = None #Set to a Person when dialogue should be taking place on the phone. Logs dialogue (but not narration) as appropriate.
             self.text_conversation_paused = False #Shows the say window as normal for all dialogue with the phone display underneath if having_text_conversation is set to a Person
 
-            self.phone = TextMessageManager()
+            self.phone = Text_Message_Manager()
 
-            self.listener_system = ListenerManagementSystem() #A listener manager to let us enroll to events and update goals when they are triggered.
+            self.listener_system = Listener_Management_System() #A listener manager to let us enroll to events and update goals when they are triggered.
 
             #How many free points does the main character have to spend on their skills/abilities
             self.free_stat_points = 0
             self.free_work_points = 0
             self.free_sex_points = 0
 
-            #The maximum score you can have in each of the major skill catagories
+            #The maximum score you can have in each of the major skill categories
             self.max_stats = 8
             self.max_work_skills = 8
             self.max_sex_skills = 8
@@ -87,6 +88,17 @@ init -2 python:
             self.scrap_goal_available = True
 
             self.can_skip_time = False #A flag used to determine when it is safe to skip time and when it is not. Left in as of v0.19.0 to ensure missed references do not cause a crash; has no function.
+
+        @property
+        def location(self):
+            if not hasattr(self, "_location"):
+                self._location = None
+            return next((x for x in list_of_places if x.identifier == self._location), bedroom) # fallback location is MC bedroom
+
+        @location.setter
+        def location(self, value):
+            if isinstance(value, Room):
+                self._location = value.identifier
 
         def change_location(self,new_location): #TODO: Check if we can add the "show_background" command for our new location here. Is there any time where we want to be in a location but _not_ show it's background?
             self.location = new_location
@@ -121,7 +133,7 @@ init -2 python:
                 mc.log_event(log_string, "float_text_yellow")
             return
 
-        def change_max_energy(self, amount, add_to_log = True):
+        def change_max_energy(self, amount ,add_to_log = True):
             amount = __builtin__.round(amount)
             self.max_energy += amount
             if self.max_energy < 0:
@@ -222,7 +234,7 @@ init -2 python:
 
         def run_day(self):
             self.listener_system.fire_event("end_of_day")
-            self.change_energy(60)
+            self.change_energy(self.max_energy * .6, add_to_log = False)
             self.masturbation_novelty += 1
             if self.masturbation_novelty > 100:
                 self.masturbation_novelty = 100
