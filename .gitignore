@@ -11,6 +11,12 @@
 # Only include Ren'Py Game Code
 !/game/game_roles/*
 !/game/sex_positions/*
+!/game/business_policies/*
+!/game/game_screens/*
+!/game/general_actions/*
+!/game/helper_functions/*
+!/game/general_actions/*
+!/game/major_game_classes/*
 *.rpyc
 !*.rpy
 !*.xml
