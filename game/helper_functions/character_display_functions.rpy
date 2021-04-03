@@ -1,5 +1,5 @@
 init -1 python:
-    def clear_scene(specific_layers = None): # Clears the current scene of characters.
+    def clear_scene(specific_layers = None): # Clears the current scene of characters. Both calls Renpy.scene("solo") as well as advances the current draw count so nothing is drawn by an out of date thread.
         global draw_layers
         if specific_layers is not None and not isinstance(specific_layers, list):
             specific_layers = [specific_layers] #Allows for passing lists or single names.
@@ -24,7 +24,6 @@ init -1 python:
     def take_animation_screenshot(): #Called on every interact beginning, if animation_draw_requested is True it makes the screenshot and starts a new thread to display the image.
         # This approach is needed because draw.screenshot is fast, but must be done in the main thread. Rendering is slower, but can be threaded. This lets us get the best of both worlds.
         global animation_draw_requested #This might have some race conditions if character images are drawn very quickly, but I doubt it will be something to worry about.
-        #log_message("General" + " | CLBK | " + str(time.time()))
 
         for draw_layer in draw_layers: #If multiple draws are prepared in a single interaction we want to screenshot all of them.
             if animation_draw_requested[draw_layer]:
@@ -37,9 +36,8 @@ init -1 python:
                     the_person = draw_package[0]
                     reference_draw_number = draw_package[1]
 
-                    the_render = prepared_animation_render[draw_layer].get(the_person.character_number, None)
-                    if the_render is not None:
-                        del prepared_animation_render[draw_layer][the_person.character_number] #Clear the render, we don't need to track it any more. Without this image renders build up over the course of the day, consuming massive amounts of memory.
+                    the_render = prepared_animation_render[draw_layer].get(the_person.character_number, None) #TODO: Change how we are stashing things in prepared_animation_render
+                    del prepared_animation_render[draw_layer][the_person.character_number] #Clear the render, we don't need to track it any more. Without this image renders build up over the course of the day, consuming massive amounts of memory.
 
                     if reference_draw_number == the_person.draw_number[draw_layer]+global_draw_number[draw_layer] and the_render is not None: #Only make draws taht are current. If eitehr the personal or global draw number has increased we do not need to draw this.
                         if isinstance(the_render, list): #It's a removal draw (Which makes prepared_animation_render a list of renders, the first (old) one should be drawn on top and faded out.
@@ -57,9 +55,7 @@ init -1 python:
                             the_render = None
 
                         else: #It's just a normal draw
-                            log_message(the_person.name + " | SCR1 | " + str(time.time()))
                             the_surface = renpy.display.draw.screenshot(the_render, False) #This is the operation that must be in the main thread, and is the major time-consumer for the animation system at the moment.
-                            log_message(the_person.name + " | SCR2 | " + str(time.time()))
                             the_render = None
                             the_person.draw_person_animation(the_surface, *prepared_animation_arguments[draw_layer][the_person.character_number])
                             the_surface = None

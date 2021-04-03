@@ -71,7 +71,7 @@ init -1 python:
         if eyes is None:
             eyes = generate_eye_colour()
         elif isinstance(eyes, basestring):
-            eyes = generate_eye_colour(eyes) #If it's a string assume we want a variation within that eye catagory
+            eyes = generate_eye_colour(eyes) #If it's a string assume we want a variation within that eye category
         # else: we assume at this point what was passed is a correct [description, colour] list.
 
         if skin is None:
@@ -85,7 +85,9 @@ init -1 python:
         else:
             body_images = black_skin
 
-        emotion_images = Expression(name+"\'s Expression Set", skin, face_style)
+        # HANDLED BY GLOBAL DICTIONARY
+        #emotion_images = Expression(name+"\'s Expression Set", skin, face_style)
+        emotion_images = None
 
         if eyes is None:
             eyes = get_random_eye()
@@ -145,7 +147,10 @@ init -1 python:
             start_sluttiness += 20
 
         if relationship is None:
-            relationship = get_random_from_weighted_list([["Single",120-age],["Girlfriend",50],["Fiancée",120-(age*2)],["Married",20+(age*4)]]) #Age plays a major factor.
+            if age < 23:
+                relationship = get_random_from_weighted_list([["Single", 70], ["Girlfriend", 30]])
+            else:
+                relationship = get_random_from_weighted_list([["Single", 80 - age], ["Girlfriend", 100 - age], ["Fiancée", age * 3], ["Married", age * 4]])
 
         if starting_wardrobe is None:
             starting_wardrobe = Wardrobe(name +"'s Wardrobe")
@@ -156,7 +161,7 @@ init -1 python:
             if relationship == "Fiancée" or relationship == "Married":
                 base_outfit.add_accessory(diamond_ring.get_copy())
 
-            if renpy.random.randint(0,100) < age:
+            if renpy.random.randint(0,100) < (age - 15):
                 #They need/want glasses.
                 the_glasses = None
                 if renpy.random.randint(0,100) < 50:
@@ -168,20 +173,23 @@ init -1 python:
 
         if kids is None:
             kids = 0
-            if age >=28:
+            if age >= 30:
                 kids += renpy.random.randint(0,1) #Young characters don't have as many kids
 
-            if age >= 38:
+            if age >= 40:
                 kids += renpy.random.randint(0,1) #As you get older you're more likely to have one
 
             if relationship == "Girlfriend":
                 kids += renpy.random.randint(0,1) #People who are dating have kids more often than single people
 
-            elif relationship != "Single":
-                kids += renpy.random.randint(0,3) #And married/engaged people have more kids still
+            elif relationship == "Fiancée":
+                kids += renpy.random.randint(0,2) #And engaged people have more kids still
 
-            if age <= 22:
-                kids += -1 #Young people have less time to have kids in general, so modify their number down a bit.
+            elif relationship == "Married":
+                kids += renpy.random.randint(0,3) #And engaged people have more kids still
+
+            if age <= 23:
+                kids -= 1 #Young people have less time to have kids in general, so modify their number down a bit.
                 if kids < 0:
                     kids = 0
 

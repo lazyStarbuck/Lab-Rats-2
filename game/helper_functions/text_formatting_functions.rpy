@@ -19,8 +19,11 @@ init -1 python:
         elif obedience_amount < 150: #130 to 149
             obedience_string = "Docile"
 
-        else: #150 or more
+        elif obedience_amount < 200: #150 to 200
             obedience_string = "Subservient"
+
+        else:    #200 or more
+            obedience_string = "Slave"
 
         return obedience_string
 

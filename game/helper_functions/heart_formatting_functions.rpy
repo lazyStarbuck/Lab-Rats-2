@@ -111,7 +111,7 @@ init -1 python:
                 image_string += "red_heart.png"
 
         elif core_slut < 10:
-            #It fits in the 5 catagory
+            #It fits in the 5 category
             if temp_slut < 10:
                 #There's no temp slut worth worrying about
                 if suggest_slut < 10:
@@ -156,7 +156,7 @@ init -1 python:
                 image_string += "quarter_gold_three_quarter_red_heart.png"
 
         elif core_slut < 15:
-            #It fits in the 10 catagory, half is gold
+            #It fits in the 10 category, half is gold
             if temp_slut < 15:
                 #No temp slut
                 if suggest_slut < 15:
