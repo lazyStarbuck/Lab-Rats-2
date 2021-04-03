@@ -193,6 +193,7 @@ label cousin_flirt_response_low(the_person):
     "[the_person.possessive_title] seems caught off guard by the compliment."
     the_person "Uh, wow. Thanks, I guess. It's not like it's anything special."
     mc.name "Well it turns out you can look cute without even trying."
+    $ mc.change_locked_clarity(5)
     "She laughs and rolls her eyes."
     the_person "You're weird, you know that?"
     return
@@ -201,6 +202,7 @@ label cousin_flirt_response_mid(the_person):
     if the_person.effective_sluttiness("underwear_nudity") < 20: #Not very slutty, so it must be high love.
         the_person "Oh my god, can't you stop acting like a depraved sex-addict, for like, two seconds?"
         mc.name "What? Don't you want to know when you're looking good?"
+        $ mc.change_locked_clarity(10)
         "She sighs and rolls her eyes."
         the_person "Whatever, it's fine I guess. Thanks."
     else:
@@ -208,6 +210,7 @@ label cousin_flirt_response_mid(the_person):
         "She runs her hands down her hips, outlining the shape of her body."
         the_person "That's so wrong, but you know that. I bet you're getting turned on, just from looking at me."
         $ the_person.draw_person(position = "back_peek")
+        $ mc.change_locked_clarity(10)
         "[the_person.possessive_title] turns around and leans forward, sticking her butt towards you and wiggling it."
         the_person "Is this what you wanted to see?"
         mc.name "It's a good start."
@@ -221,6 +224,7 @@ label cousin_flirt_response_high(the_person):
         if the_person.effective_sluttiness() > (25 - the_person.get_opinion_score("incest")*5): # High sluttiness flirt
             the_person "Oh I'm sorry, am I turning you on with my big, juicy tits?"
             $ the_person.draw_person(the_animation = blowjob_bob)
+            $ mc.change_locked_clarity(15)
             "[the_person.possessive_title] grabs her boobs and bounces them up and down for you."
             mc.name "I mean... Yeah."
             "She smiles and squeezes down on her own breasts."
@@ -251,6 +255,7 @@ label cousin_flirt_response_high(the_person):
             the_person "How likely am I to strip for my cousin? Pretty close to zero."
             mc.name "So you're saying there's a chance?"
             the_person "Oh my god, you're the worst. It's kind of fun knowing I have this effect on you."
+            $ mc.change_locked_clarity(10)
             "She sways her hips side to side, accentuating her curves."
             the_person "But no, I don't think you have much of a chance."
 
@@ -280,6 +285,7 @@ label cousin_flirt_response_high(the_person):
                     mc.name "Come on, you're really going to make me wait?"
                     $ the_person.draw_person(the_animation = blowjob_bob)
                     "[the_person.possessive_title] smiles mischievously and grabs her tits, jiggling them in front of your face."
+                    $ mc.change_locked_clarity(15)
                     the_person "Yeah, I am. Be a patient boy and maybe you'll get to see these later."
                     "She winks and lets go of her tits. It takes a second before they stop jiggling completely."
                     $ the_person.draw_person()
@@ -291,6 +297,7 @@ label cousin_flirt_response_high(the_person):
             mc.name "Relax, I'm just joking around."
             the_person "Uh huh? So you're telling me you don't want to play with my big, juicy tits?"
             $ the_person.draw_person(the_animation = blowjob_bob)
+            $ mc.change_locked_clarity(15)
             "She grabs her tits and jiggles them in front of your face."
             mc.name "Well... I wouldn't say no."
             the_person "Yeah, that's what I thought. So let's try not to get in trouble, okay?"

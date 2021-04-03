@@ -428,6 +428,7 @@ label cousin_blackmail_list(the_person):
                         "Once [the_person.possessive_title] has stripped down to her underwear, she turns around to let you look at her ass."
                     else:
                         "Once [the_person.possessive_title] has stripped down as far as she's willing, she turns around to let you look at her ass."
+                    $ mc.change_locked_clarity(20)
                     $ the_person.draw_person(position = "back_peek")
                     $ the_person.update_outfit_taboos()
                     the_person "Finished yet? I bet you're about to cream your fucking pants looking at this."
@@ -472,9 +473,11 @@ label cousin_blackmail_list(the_person):
                         the_person "Sad you don't get to see my tight, wet pussy [the_person.mc_title]?"
                         the_person "Deal with it. Go cry to mommy if it matters that much to you."
 
+                    $ mc.change_locked_clarity(20)
                     "Once [the_person.possessive_title] has stripped down, she turns around to let you get a look at her ass."
                     $ the_person.draw_person(position  = "back_peek")
                     the_person "Look all you want... I bet you're creaming your pants thinking about touching me."
+                    $ mc.change_locked_clarity(10)
                     "She wiggles her butt in your direction. Her tits swing back and forth with the same movement."
                     the_person "Well keep dreaming. I'm not that fucking desperate."
                     "Once you've gotten your fill, [the_person.title] gets dressed again."
@@ -514,12 +517,14 @@ label cousin_blackmail_list(the_person):
                     $ the_item = None
                     the_person "There, are you satisfied?"
                     $ the_person.draw_person(position = "back_peek")
+                    $ mc.change_locked_clarity(20)
                     "She spins on the spot, letting you get a look at her ass."
                     #TODO: keep a record of how many times you've (fucked, been sucked by, etc.) the person so she can comment on that.
                     mc.name "I'm not sure this is enough [the_person.title]. I think you need to convince me."
                     "[the_person.possessive_title] sighs dramatically."
                     $ the_person.draw_person()
                     the_person "Please [the_person.mc_title], please don't tell my mom what a bad girl I've been."
+                    $ mc.change_locked_clarity(20)
                     the_person "I'm here, with my big fucking tits and my tight fucking cunt out just for you. Please don't say anything."
                     "She gives you an overly dramatic pout."
                     mc.name "Fine, that'll do."
@@ -662,6 +667,8 @@ label cousin_blackmail_ask_label(the_person):
         mc.name "You know you can trust me. What have you been doing?"
         "She hesitates, torn between her love for you and her desire for privacy. She finally breaks down."
         the_person "I have a new job."
+        the_person "..."
+        $ mc.change_locked_clarity(5)
         the_person "At a strip club."
         mc.name "What?"
         the_person "I got a job at a strip club. I didn't tell my mom because she would flip out."
@@ -669,6 +676,7 @@ label cousin_blackmail_ask_label(the_person):
         the_person "Can you please just not tell her? I make a lot of money. I could give you a cut to stay quiet."
         mc.name "I would really hate to let your mom down though..."
         "She sighs and nods her head."
+        $ mc.change_locked_clarity(5)
         the_person "Yeah, yeah, I know what else you want. I'll let you touch me sometimes, if you promise to keep your mouth shut."
         mc.name "I think that might be enough."
         $ the_person.event_triggers_dict["blackmail_level"] = 2
@@ -684,6 +692,8 @@ label cousin_blackmail_ask_label(the_person):
         mc.name "Well, I want to know. What have you been doing?"
         "She hesitates, fighting against her own obedience to you, then breaks down."
         the_person "I have a new job."
+        the_person "..."
+        $ mc.change_locked_clarity(5)
         the_person "At a strip club."
         mc.name "What?"
         the_person "I got a job at a strip club, and I don't want my mom to know, okay?"
@@ -692,6 +702,7 @@ label cousin_blackmail_ask_label(the_person):
         "She sighs dramatically."
         the_person "Yeah, yeah. I see where this is going. I'll give you a cut."
         mc.name "And?"
+        $ mc.change_locked_clarity(5)
         the_person "And... I'll let you touch me sometimes, if you promise to stay quiet."
         mc.name "I think that might be enough."
         $ the_person.event_triggers_dict["blackmail_level"] = 2
@@ -791,6 +802,7 @@ label cousin_blackmail_level_2_confront_label(the_person):
     mc.name "And?"
     the_person "And? What \"and\"? could you want?"
     mc.name "That whole strip show is just a massive tease. I'm feeling a little unsatisfied."
+    $ mc.change_locked_clarity(5)
     the_person "God, you fucking perv. Fine, if you can keep quiet I might also let you... touch me. Deal?"
     mc.name "I think that might be enough."
     $ the_person.event_triggers_dict["blackmail_level"] = 2
@@ -820,6 +832,7 @@ label cousin_boobjob_ask_label(the_person):
     else:
         the_person "Hey, I'm glad you're here, I wanted to ask you about something."
 
+    $ mc.change_locked_clarity(5)
     the_person "I need money for a boob job."
     mc.name "Why do you need a boob job, and why should I be paying for it?"
     the_person "Come on, you know where I work. Girls with bigger tits get tipped more."
@@ -905,6 +918,7 @@ label cousin_boobjob_ask_label(the_person):
                 mc.name "What can you do? I've got the money, I just don't see a reason to give it to you."
                 the_person "You don't see a reason to get me some big, juicy tits?"
                 "She leans close to you, standing on the tips of her toes to whisper sensually into your ear."
+                $ mc.change_locked_clarity(10)
                 the_person "Maybe I can show you why... Would that be enough? If your slutty, stripper cousin helped get you off, would that be enough to convince you?"
                 menu:
                     "Pay for it and fuck her\n{color=#ff0000}{size=18}Costs: $5000{/size}{/color}":
@@ -1013,6 +1027,7 @@ label cousin_new_boobs_brag_label(the_person):
     #She brags about her new boobs and offers to let you see/touch them if she's slutty enough.
     $ the_person.draw_person()
     the_person "Hey [the_person.mc_title]. Do you notice anything different?"
+    $ mc.change_locked_clarity(10)
     if the_person.love < 10:
         "[the_person.possessive_title] seems unusually happy to see you. She puts her arms behind her back and sways her shoulders."
     else:
@@ -1042,11 +1057,13 @@ label cousin_new_boobs_brag_label(the_person):
     mc.name "You've got the idea."
 
     if the_person.outfit.tits_visible(): #They're already out, she can't exactly charge you to see them.
+        $ mc.change_locked_clarity(10)
         "She looks down at her chest and shakes her tits a little, obviously for her own enjoyment and not yours."
         "After a moment watching them jiggle she looks at you."
         the_person "Did you need anything else?"
 
     else:
+        $ mc.change_locked_clarity(5)
         if mc.location.get_person_count() > 1: #More than just her here.
             the_person "So... Do you want to see them? We can go find somewhere quiet."
         else:

@@ -173,6 +173,7 @@ label aunt_flirt_response_low(the_person):
     the_person "Thank you [the_person.mc_title], that's very kind of you to say."
     the_person "It's nice to know my sense of style isn't too dated."
     mc.name "Not at all, I think it's fantastic."
+    $ mc.change_locked_clarity(5)
     "She smiles and laughs."
     the_person "You better stop there or I'll drag you clothes shopping with me."
     return
@@ -185,12 +186,14 @@ label aunt_flirt_response_mid(the_person):
         "She sighs and rolls her eyes."
         the_person "I... guess it's still nice to hear though. It's been a while since anyone thought I was \"hot\"."
         mc.name "Well I'm happy to tell you that you are very, very hot [the_person.title]."
+        $ mc.change_locked_clarity(10)
         "[the_person.possessive_title] smiles and shrugs."
         the_person "Fine, I'm hot. Just... don't tell your mother you talk to me like this. She would think it's weird."
     else:
         the_person "Thank you! You know, it's been a long time since anyone thought I was \"hot\"."
         the_person "I didn't think it would be my own nephew who thought so, but I'll take what I can get."
         "[the_person.possessive_title] smiles and runs her hands down her hips. She hesitates for a moment, then turns around and pats her ass."
+        $ mc.change_locked_clarity(10)
         $ the_person.draw_person(position = "back_peek")
         the_person "Do... Do you think my butt still looks good? I know I shouldn't ask you, but... I'm a little self-conscious and I trust you."
         mc.name "Your ass looks fantastic [the_person.title]."
@@ -233,6 +236,7 @@ label aunt_flirt_response_high(the_person):
                     mc.name "How about you just jiggle your tits for me, and that'll be all. I always want to see that."
                     the_person "That's not so bad, right?"
                     $ the_person.draw_person(the_animation = blowjob_bob)
+                    $ mc.change_locked_clarity(15)
                     "[the_person.possessive_title] grabs her own tits and jiggles them up and down, alternating between her left and right boob."
                     "She lets you watch for a few moments, then lets go and laughs self-consciously."
                     the_person "You're such a bad influence on me, you know that?"
@@ -275,6 +279,7 @@ label aunt_flirt_response_high(the_person):
                     the_person "We should still be careful. If my sister found out we talked like this I wouldn't be able to see you any more."
                     the_person "Which would also mean..."
                     $ the_person.draw_person(the_animation = blowjob_bob)
+                    $ mc.change_locked_clarity(15)
                     "She checks that nobody else is looking, then grabs her tits and jiggles them for you."
                     the_person "You wouldn't get to see these any more either. You don't want that, do you?"
                     mc.name "You make a very convincing point..."
@@ -289,6 +294,7 @@ label aunt_flirt_response_high(the_person):
             the_person "You don't want that, do you?"
             mc.name "No, of course not."
             the_person "Good. Just be a little more careful next time."
+            $ mc.change_locked_clarity(5)
             "She places a gentle hand on your shoulder and kisses you on the cheek."
     return
 

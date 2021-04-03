@@ -378,6 +378,7 @@ label bimbo_flirt_response_low(the_person):
             the_person "Hehe, thanks! I love these outfits you make us wear, they're, like, so cute!"
             the_person "Maybe you should pick out other things for me to wear. I bet you have some good ideas!"
             mc.name "For you I certainly do. Maybe I'll talk to you later about it."
+            $ mc.change_locked_clarity(5)
             "She smiles happily."
             the_person "Alright!"
 
@@ -388,15 +389,18 @@ label bimbo_flirt_response_low(the_person):
                 the_person "Thanks! I keep worrying I'm going to get in trouble, but then I remember I'm allowed to be dressed like this!"
                 mc.name "Not just allowed: required."
                 the_person "Yeah! This is such a crazy place to work!"
+                $ mc.change_locked_clarity(10)
                 "[the_person.possessive_title] bounces happily, unintentionally jiggling her tits."
 
             elif the_person.outfit.tits_visible():
                 #Her tits are out
                 if the_person.has_large_tits():
                     the_person "Hehe, thanks! I really like how it shows off my big tits!"
+                    $ mc.change_locked_clarity(10)
                     "[the_person.possessive_title] bounces happily, jiggling her breasts."
                     the_person "People are always telling me I need to hide them, but at work I don't have to worry about that!"
                 else:
+                    $ mc.change_locked_clarity(10)
                     the_person "Hehe, thanks! I really like how I it shows off my boobs!"
                     "[the_person.possessive_title] looks down at her own chests and pouts."
                     the_person "I wish they were bigger though. Oh well!"
@@ -405,6 +409,7 @@ label bimbo_flirt_response_low(the_person):
                 # Her underwear is visible.
                 the_person "Hehe, thank you! I know it's a little slutty, but I like how little these outfits you make us wear cover!"
                 mc.name "I certainly do too."
+                $ mc.change_locked_clarity(10)
                 "She laughs and sticks her tongue out."
                 the_person "You're silly, you know that? But like, in a fun way."
             else:
@@ -413,6 +418,7 @@ label bimbo_flirt_response_low(the_person):
                 mc.name "More than okay, it's required."
                 the_person "Oh yeah, right! I'm sorry, there are so many rules here, I'm always forgetting them!"
                 mc.name "Well don't worry, you're doing a great job so far."
+                $ mc.change_locked_clarity(10)
                 "[the_person.possessive_title] smiles and bounces happily."
                 the_person "Yay!"
 
@@ -420,6 +426,7 @@ label bimbo_flirt_response_low(the_person):
         #She's in her own outfit.
         the_person "Aw, thanks! It took me sooooo long to decide what to wear today. I picked this because it made my ass look good. What do you think?"
         $ the_person.draw_person(position = "back_peek")
+        $ mc.change_locked_clarity(10)
         "[the_person.possessive_title] spins around and leans forward a little, wiggling her butt at you."
         mc.name "Oh yeah, I think it looks really good."
         $ the_person.draw_person()
@@ -429,6 +436,7 @@ label bimbo_flirt_response_low(the_person):
 label bimbo_flirt_response_mid(the_person):
     if the_person.is_wearing_uniform():
         if the_person.judge_outfit(the_person.outfit):
+            $ mc.change_locked_clarity(15)
             if the_person.outfit.tits_visible():
                 the_person "Hehe, thanks! Do you like my boobs?"
                 "She puts her hands behind her back and thrusts her chest out at you, waiting for your response."
@@ -446,6 +454,7 @@ label bimbo_flirt_response_mid(the_person):
             the_person "Oh, we should totally go partying together! That would be, like, so much fun!"
             mc.name "That does sound like fun. Maybe we will."
             "She nods and smiles happily."
+            $ mc.change_locked_clarity(15)
             the_person "I can even wear something nice for you, instead of this silly uniform you make..."
             "She stops suddenly and covers her mouth with her hand."
             the_person "Oops. I'm sorry, I didn't mean that. I just kind of talk without thinking sometimes." #TODO: On with the spanking! And then, the oral sex!
@@ -457,6 +466,7 @@ label bimbo_flirt_response_mid(the_person):
         if the_person.effective_sluttiness() < 20 and mc.location.get_person_count() > 1:
             the_person "Hehe, thanks! I uh..."
             "[the_person.possessive_title] bites her lip and leans closer to you to whisper in your ear."
+            $ mc.change_locked_clarity(15)
             the_person "I think you're, like, pretty hot too."
             "She pulls back and smiles playfully."
 
@@ -465,6 +475,7 @@ label bimbo_flirt_response_mid(the_person):
             the_person "Oh, we should totally go partying some time! I can wear something even cuter for you..."
             $ the_person.draw_person(position = "back_peek")
             the_person "Maybe something that shows off my butt a little more... Doesn't that sound fun?"
+            $ mc.change_locked_clarity(15)
             "[the_person.possessive_title] wiggles her hips, shaking her butt for your enjoyment."
             mc.name "That does sound like fun. Maybe we should go out one day."
             $ the_person.draw_person()
@@ -501,6 +512,7 @@ label bimbo_flirt_response_high(the_person):
             the_person "But maybe... We could fool around, if you really want to. I think you're pretty cute."
 
         else:  #She's into turning you on.
+            $ mc.change_locked_clarity(20)
             if the_person.has_large_tits(): #Bounces her tits for you
                 "She giggles and grabs her own tits, jiggling them for you."
                 $ the_person.draw_person(the_animation = blowjob_bob)
@@ -559,12 +571,14 @@ label bimbo_flirt_response_girlfriend(the_person):
 
         else:
             "[the_person.possessive_title] giggles and pets your arm affectionately."
+            $ mc.change_locked_clarity(10)
             the_person "Oh my god, you're such a sweetie! Do you want me to suck your cock?"
             menu:
                 "Get a blowjob":
                     mc.name "Is that even a question? Of course I do!"
                     "She grins and knees down, ignoring the other people in the room."
                     "[the_person.title] unzips your pants and pulls your cock out, eagerly running her tongue along the sides."
+                    $ mc.change_locked_clarity(10)
                     the_person "Mmmm, so tasty!"
                     $ blowjob.current_modifier = "blowjob"
                     $ blowjob.redraw_scene(the_person)
@@ -575,6 +589,7 @@ label bimbo_flirt_response_girlfriend(the_person):
                 "Just flirt":
                     mc.name "Thanks for the offer, but I'm a little busy at the moment."
                     "She pouts and sighs."
+                    $ mc.change_locked_clarity(20)
                     the_person "Awww, I was already getting exited. I get so horny when I think about having your cock in my mouth..."
 
     else:
@@ -584,6 +599,7 @@ label bimbo_flirt_response_girlfriend(the_person):
         menu:
             "Make out":
                 "You put your arms around her and pull her tight against you as you return her kisses."
+                $ mc.change_locked_clarity(15)
                 "Bit by bit they transition from energetic to sensual, and soon you have [the_person.possessive_title]'s body grinding against yours as you make out."
                 call fuck_person(the_person, start_position = kissing, skip_intro = True) from _call_fuck_person_63
                 $ the_person.call_dialogue("sex_review", the_report = _return)
@@ -593,6 +609,7 @@ label bimbo_flirt_response_girlfriend(the_person):
                 "You give [the_person.possessive_title] a few quick kisses, then lean your head back to get some air."
                 mc.name "Easy there, down girl."
                 "She lets go of you and giggles."
+                $ mc.change_locked_clarity(15)
                 the_person "Sorry, I just get so excited when I'm around you. You make me feel like a whole new person!"
     return
 
@@ -602,6 +619,7 @@ label bimbo_flirt_response_affair(the_person):
     if mc.location.get_person_count() > 1: #There are other people around, she's nervous about people finding out what you're doing.
         if (the_person.get_opinion_score("cheating on men") *15) + the_person.effective_sluttiness() > 50: #SHe's turned on by flirting in public or doesn't think anything is wrong with it
             the_person "Oh my god, you too?!"
+            $ mc.change_locked_clarity(15)
             "[the_person.possessive_title] jumps excitedly, jiggling her tits around."
             the_person "Come on, let's sneak away and have fun. My [so_title] just doesn't understand what a woman like me needs."
             "She runs a hand over your chest, oblivious to anyone nearby who might be watching."
@@ -623,6 +641,7 @@ label bimbo_flirt_response_affair(the_person):
                     the_person "Aww... Okay, but I really need you soon. You aren't bored of me, are you?"
                     mc.name "Of course not. Don't worry, as soon as we have the chance I'll fuck your brains out."
                     "Her mood snaps back to happy. She smiles and kisses you on the cheek."
+                    $ mc.change_locked_clarity(10)
                     the_person "Okay! I'm getting wet just thinking about it!"
 
         else: #She's shy or nervous about being discovered
@@ -632,6 +651,7 @@ label bimbo_flirt_response_affair(the_person):
     else:
         the_person "Hehe, you're so sweet [the_person.mc_title]!"
         "She wraps her arms around you and hugs you tight. When she lets go she tilts her head and smiles."
+        $ mc.change_locked_clarity(10)
         the_person "So, do you want me to suck your cock then? Is that one of the things?"
         menu:
             "Get a blowjob":
@@ -639,6 +659,7 @@ label bimbo_flirt_response_affair(the_person):
                 mc.name "Yeah, that sounds good."
                 "She giggles and drops to her knees on the spot. You step close and she unzips your pants."
                 "[the_person.possessive_title] bites her lip and stares at your hard cock when it springs out in front of her."
+                $ mc.change_locked_clarity(15)
                 "After a moment she snaps out of it and leans forward, kissing the tip and flicking her tongue along the bottom of your shaft."
                 $ blowjob.current_modifier = "blowjob"
                 $ blowjob.redraw_scene(the_person)
@@ -648,6 +669,7 @@ label bimbo_flirt_response_affair(the_person):
                 $ the_person.review_outfit()
             "Just flirt":
                 mc.name "How did you guess?"
+                $ mc.change_locked_clarity(15)
                 the_person "Everyone likes having their cock sucked. Well, not women I guess. But all men do."
                 "She starts to kneel down, but you put your arm around her waist and hold her close."
                 mc.name "Well you're right, but I don't have the time right now. You'll have to wait until later, okay?"
@@ -682,6 +704,53 @@ label bimbo_flirt_response_text(the_person):
         else:
             the_person "I am now that I'm texting you!"
             the_person "Oh, and maybe I'll go shopping soon. That's always fun!"
+    return
+
+label bimbo_condom_demand(the_person):
+    if the_person.get_opinion_score("bareback sex") > 0 or the_person.get_opinion_score("creampies") > 0:
+        the_person "Do you, like, have a condom with you?"
+        the_person "I might beg you to cum inside me otherwise, and that would be a really dumb idea."
+    else:
+        the_person "Hey, I know this is super silly, but..."
+        the_person "Do you have one of those condom things? I need you to wear it so I don't end up pregnant!"
+    return
+
+label bimbo_condom_ask(the_person):
+    if the_person.on_birth_control:
+        # the_person "Want a condom? I'm on the pill, but I guess it's still possible something goes wrong."
+        the_person "I remembered to take my little pill today, so we don't need a condom, right?"
+        the_person "... At least, I think I remembered to take it. Hmm, maybe you should wear one."
+        $ the_person.update_birth_control_knowledge()
+    elif the_person.get_opinion_score("creampies") > 0:
+        the_person "Oh, if you put on a condom you can cum inside me!"
+        the_person "They're, like, the best invention ever. You get to fuck me and cum, and I don't get pregnant!"
+        $ the_person.discover_opinion("creampies")
+    else:
+        the_person "Come on, what are you waiting for? Did you need a condom or something?"
+    return
+
+label bimbo_condom_bareback_ask(the_person):
+    if the_person.get_opinion_score("creampies") > 0:
+        if the_person.on_birth_control:
+            the_person "Don't worry about a condom [the_person.mc_title]. I'm super sure I took my birth-y pill this morning."
+            the_person "So you can cum inside me, just how I like it!"
+            $ the_person.update_birth_control_knowledge()
+        else:
+            the_person "Come on [the_person.mc_title], fuck me raw! Like an animal!"
+            the_person "Animals don't have condoms. They just fuck when they want, how they want!"
+            the_person "And I guess sometimes they get pregnant... But I don't care about that!"
+        $ the_person.discover_opinion("creampies")
+    else:
+        the_person "Don't put on a condom [the_person.mc_title]. Just fuck me and cum wherever, that's how I want it!"
+    return
+
+label bimbo_condom_bareback_demand(the_person):
+    if the_person.get_opinion_score("bareback sex") > 0 or the_person.get_opinion_score("creampies") > 0: #Just likes raw sex
+        the_person "You don't need that silly! I like doing it without it, it's so much better!"
+        the_person "Especially when you cum! It's so warm inside me!"
+    else:
+        the_person "You don't need that silly! It's so much better without one!"
+        the_person "Hurry, I want you to fuck me already!"
     return
 
 label bimbo_cum_face(the_person):
@@ -987,6 +1056,7 @@ label bimbo_date_seduction(the_person):
         "She bites her lip and twirls her hair around one of her fingers."
         #"[the_person.possessive_title] grabs your hand and pulls you around to look at her."
         # the_person "Hey, that was such a great time. So I was thinking..."
+        $ mc.change_locked_clarity(50)
         if the_person.effective_sluttiness(["vaginal_sex", "condomless_sex"]) > 60 and the_person.wants_creampie() and the_person.effective_sluttiness() > the_person.get_no_condom_threshold() and the_person.get_opinion_score("bareback sex") >= 0 and the_person.get_opinion_score("creampies") >= 0 and not the_person.on_birth_control and not the_person.event_triggers_dict.get("preg_knows", False):
             if the_person.get_opinion_score("creampies") > 0: #No condoms, loves creampies, she's basically asking you to knock her up. So... have her ask you to knock her up!
                 the_person "Come home with me! We can fuck, and if I'm lucky you'll get me pregnant!"
@@ -1018,6 +1088,7 @@ label bimbo_date_seduction(the_person):
         $ so_title = SO_relationship_to_title(the_person.relationship)
         the_person "So my [so_title] said he was going to be working for, like, the entire knight."
         "She grabs your hands and looks eagerly into your eyes, practically vibrating with excitement."
+        $ mc.change_locked_clarity(60)
         if the_person.wants_creampie() and the_person.effective_sluttiness() > the_person.get_no_condom_threshold() and the_person.get_opinion_score("bareback sex") >= 0 and the_person.get_opinion_score("creampies") >= 0 and not the_person.on_birth_control and not the_person.event_triggers_dict.get("preg_knows", False):
             if the_person.get_opinion_score("creampies") > 0: #No condoms, loves creampies, she's basically asking you to knock her up. So... have her ask you to knock her up!
                 the_person "Come home with me! Please? I'll bounce on your dick all night, and you can even get me pregnant if you want!"
@@ -1047,6 +1118,7 @@ label bimbo_date_seduction(the_person):
         else:
             the_person "Come home with me! I don't want to spend the whole night alone. I can think of, like, a ton of things for us to do together."
     elif the_person.relationship == "Single":
+        $ mc.change_locked_clarity(40)
         if the_person.sluttiness > the_person.love:
             if the_person.sluttiness > 40:
                 the_person "So [the_person.mc_title], don't you think it's time you came back home with me and we had some real fun?"
@@ -1059,7 +1131,9 @@ label bimbo_date_seduction(the_person):
             the_person "[the_person.mc_title], I don't know how you do it but I swear you've been driving me, like, totally crazy all night."
             "[the_person.title] runs her hand along your arm and giggles."
             the_person "I want you to come back to my place so I can have you all to myself."
+            $ mc.change_locked_clarity(40)
         else:
+            $ mc.change_locked_clarity(40)
             the_person "Oh my god [the_person.mc_title], tonight has been so much fun. Do you want to, like, come back home with me and drink some more?"
     return
 

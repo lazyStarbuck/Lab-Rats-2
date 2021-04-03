@@ -287,22 +287,26 @@ label advanced_serum_stage_2_label(the_person):
     $ the_person.change_happiness(15)
     the_person "I don't know why I was so worried about this, I feel silly getting you so involved. This feels fine."
     $ the_person.change_slut_core(5)
-    $ the_person.change_slut_temp(7)
+    $ the_person.change_slut_temp(10)
+    $ mc.change_locked_clarity(5)
     the_person "I mean, not that I mind the help of such a good looking man."
     "She giggles and looks you up and down."
     mc.name "Try and focus [the_person.title], do you notice any unusual with yourself right now?"
+    $ mc.change_locked_clarity(5)
     the_person "With me? Why would... Oh right, because of the test! Sorry, you're just so... distracting."
     $ the_person.change_int(-1)
-    $ the_person.change_slut_core(5)
-    $ the_person.change_slut_temp(7)
+    $ the_person.change_slut_core(10)
+    $ the_person.change_slut_temp(20)
     "She bites her lip and takes a step closer. You notice her cheeks are flush and her breathing is getting a little heavier."
+    $ mc.change_locked_clarity(5)
     the_person "Ugh, [the_person.mc_title] do we really have to do this right now? Couldn't we be doing something more fun? I can think of a ton of fun things we could do together."
     $ the_person.change_int(-1)
-    $ the_person.change_slut_core(5)
-    $ the_person.change_slut_temp(7)
+    $ the_person.change_slut_core(10)
+    $ the_person.change_slut_temp(20)
     $ old_personality = the_person.personality
     $ the_person.personality = bimbo_personality
     $ mc.log_event(the_person.title + ": Personality changed. Now: Bimbo", "float_text_pink")
+    $ mc.change_locked_clarity(10)
     "[the_person.title] reaches her hand down to your waist and runs her fingers along your cock through your pants."
     menu:
         "Have sex with [the_person.title]":

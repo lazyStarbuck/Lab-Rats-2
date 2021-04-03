@@ -267,6 +267,7 @@ label strip_explanation(the_person):
     the_person "So you want me to give you a strip show?"
     "You nod."
     "[the_person.possessive_title] seems surprised, but not particularly offended by the idea. She takes a long moment to consider it."
+    $ mc.change_locked_clarity(20)
     the_person "Okay, I'll do it. I want $100 up front, plus a little extra if you want me to take anything off."
     mc.name "I think that's reasonable."
     $ the_person.change_obedience(5)
@@ -324,6 +325,7 @@ label sister_instathot_intro_label(the_person):
 
     "You open the door to [the_person.possessive_title]'s room."
     $ the_person.draw_person(position = "kneeling1")
+    $ mc.change_locked_clarity(10)
     "She's posed on her bed, holding her phone high up in one hand to take a selfie. She startles when you come in, standing up quickly before calming down."
     $ the_person.draw_person()
     the_person "Oh... It's just you. Come in and close the door, please."
@@ -353,6 +355,7 @@ label sister_instathot_intro_label(the_person):
             $ the_person.draw_person()
             $ the_person.change_love(2)
             the_person "Thank you so much, you're the best!"
+            $ mc.change_locked_clarity(10)
             "She gives you a quick kiss on the cheek."
             the_person "It's so nice to have you helping me with this. I could never get any of these shots myself, and it's not like I could ask Mom for help."
             the_person "If you ever have some spare time and want to be the greatest brother we could do this again. If my shots end up being popular I could even split some of the cash with you."
@@ -432,6 +435,7 @@ label sister_instathot_label_solo(the_person):
     $ generalised_strip_description(the_person, the_person.outfit.get_full_strip_list())
 
     $ the_person.draw_person(position = "doggy")
+    $ mc.change_locked_clarity(20)
     "She gets onto her knees and pulls a shopping bag from the mall out from under her bed."
     the_person "I keep my stuff here so Mom doesn't find it. Okay, let's put this on!"
     $ the_person.draw_person(emotion = "happy")
@@ -439,6 +443,7 @@ label sister_instathot_label_solo(the_person):
     if the_person.event_triggers_dict.get("insta_special_request_outfit", False):
         $ insta_outfit = the_person.event_triggers_dict.get("insta_special_request_outfit")
         $ the_person.apply_outfit(insta_outfit, update_taboo = True)
+        $ mc.change_locked_clarity(10)
         the_person "A fan said I should wear this. Isn't it cute?"
 
     else:
@@ -511,6 +516,7 @@ label sister_instathot_label_solo(the_person):
                 $ del the_suggested_outfit
 
     $ the_person.draw_person(emotion = "happy", position = "kneeling1")
+    $ mc.change_locked_clarity(10)
     "She jumps up onto her bed and gives the camera her sluttiest pout."
     "For the next hour you help [the_person.title] take pictures for her InstaPic account. She looks over each one, deciding if it's worth keeping or not."
     if special_request == "underwear" and not the_person.event_triggers_dict.get("sister_insta_special_ignore", False): #TODO: Set up this flag. For now it only triggers when you send her a request for it.
@@ -634,6 +640,7 @@ label sister_instathot_special_underwear(the_person): #She's been asked to do an
         "[the_person.title] starts to pull her clothes off."
         $ generalised_strip_description(the_person, strip_list)
         $ del strip_list
+    $ mc.change_locked_clarity(10)
 
     if the_person.outfit.tits_visible() or the_person.outfit.vagina_visible():
         the_person "Hmm, I guess I should actually put on some underwear. One second!"
@@ -651,6 +658,7 @@ label sister_instathot_special_underwear(the_person): #She's been asked to do an
         the_person "Let's make sure we get something sexy for this guy, okay?"
 
     $ the_person.draw_person(position = "back_peek")
+    $ mc.change_locked_clarity(10)
     "You take some shots for [the_person.possessive_title] while she poses in her underwear."
     the_person "Okay, there should be something good there. Let me take a look!"
     "She hurries over to you and holds onto your arm as you flick through the pictures you just took."
@@ -682,6 +690,7 @@ label sister_instathot_special_pictures(the_person, is_topless_shoot = True):
                 generalised_strip_description(the_person, the_person.outfit.get_tit_strip_list())
         else:
             generalised_strip_description(the_person, the_person.outfit.get_full_strip_list())
+    $ mc.change_locked_clarity(20)
 
     $ the_person.update_outfit_taboos()
     "She gets onto her bed, onto her knees, and looks at you and the camera."
@@ -694,6 +703,7 @@ label sister_instathot_special_pictures(the_person, is_topless_shoot = True):
         the_person "Wait, just a few more. Get a few where I roll my eyes up, like I'm cumming or something."
         $ the_person.draw_person(position = "kneeling1", emotion = "orgasm")
         "[the_person.possessive_title] sticks her tongue out and crosses her eyes. She trusts her chest forward and pants for added effect."
+        $ mc.change_locked_clarity(10)
         menu:
             "Take the pictures":
                 "You take a few more pictures, capturing her tits along with her fake-orgasm face."
@@ -705,22 +715,27 @@ label sister_instathot_special_pictures(the_person, is_topless_shoot = True):
                 if the_person.effective_sluttiness() <= 50:
                     $ the_person.draw_person(position = "kneeling1", emotion = "happy")
                     "She blushes and giggles, then responds jokingly."
+                    $ mc.change_locked_clarity(5)
                     the_person "Oh, something like... Ah... I'm totally cumming."
                     mc.name "Come on, I'm serious. The pictures will look better if you act it out and really pretend."
                     mc.name "Think about what makes you cum, imagine you're right at the edge and it's all you want."
                     the_person "Fine, I'll try..."
                     $ the_person.draw_person(position = "kneeling1", emotion = "orgasm")
                 "She wiggles her shoulders and takes a few deep, sensual breaths."
+                $ mc.change_locked_clarity(10)
                 the_person "Oh my god, I'm going to cum! I'm going to cum so fucking hard!"
                 the_person "Fuck, I'm cumming! I'm cumming [the_person.mc_title]! Mmm!"
+                $ mc.change_locked_clarity(10)
                 "She rolls her eyes up towards the ceiling as she pretends to orgasm. You get a few more shots and push her for more."
                 mc.name "That's it, keep going. What's making you cum [the_person.title]? Tell me!" #TODO: If we ever add more opinion information we can tie that in here.
+                $ mc.change_locked_clarity(10)
                 the_person "Your big cock is making me cum! I'm such a dirty little slut, cumming on your huge dick!"
                 "[the_person.possessive_title] is panting loudly now as she continues to give a very convincing performance."
                 "...At least you're pretty sure it's a performance."
                 "You try to ignore the throbbing erection you have now and get a few more shots of [the_person.title]."
                 the_person "Cuuuumming! Aaaah! Ah... Ah...."
                 "[the_person.title] rolls her eyes up as far as she can, sticks her tongue out, and squeals happily for the camera."
+                $ mc.change_locked_clarity(10)
                 "You get the last shot - definitely the best of the lot - nod to [the_person.possessive_title]."
                 "She takes a moment to recover from her theatrics, then hops off her bed and hurries over to you."
 
@@ -771,6 +786,7 @@ label sister_instathot_special_pictures(the_person, is_topless_shoot = True):
     else:
         the_person "Yay! Let me see how they turned out!"
         $ the_person.draw_person(emotion = "happy")
+        $ mc.change_locked_clarity(10)
         if is_topless_shoot:
             "[the_person.title] hops off of the bed and hurries to your side. She holds onto your arm as you flick through her topless shots."
         else:
@@ -875,6 +891,7 @@ label sister_instathot_label_mom(the_sister, the_mom):
             the_sister "You don't have to wear it if you don't want to though. I..."
             $ the_group.draw_person(the_mom)
             "[the_mom.title] shakes her head and interrupts."
+            $ mc.change_locked_clarity(20)
             the_mom "[the_sister.title], I want the whole experience! These outfits will get you more view on your insta... view... pic thing, right?"
             the_mom "Come on, show me what you picked out for me. I'm sure I can squeeze into it with a little bit of work."
         else:
@@ -882,6 +899,7 @@ label sister_instathot_label_mom(the_sister, the_mom):
             the_sister "You don't have to change anything though, I'll just..."
             $ the_group.draw_person(the_mom)
             "[the_mom.title] shakes her head and interrupts."
+            $ mc.change_locked_clarity(20)
             the_mom "[the_sister.title], I want the whole experience! Don't you want more views on your insta... view... pic thing?"
             the_mom "Come on, show me what you have. I'm sure you have something I can squeeze into."
         $ the_group.draw_person(the_sister)
@@ -924,7 +942,7 @@ label sister_instathot_label_mom(the_sister, the_mom):
     # Now loop through everyone
 
     $ generalised_strip_description(stripper, stripper.outfit.get_full_strip_list(), group_display = the_group, other_people = [(not_stripper, not_stripper.outfit.get_full_strip_list())])
-
+    $ mc.change_locked_clarity(30)
     "[stripper.title] finishes stripping naked and starts to put on her outfit. [not_stripper.title] is naked now too, and is doing the same."
 
     $ stripper = None #Clear the reference.
@@ -933,10 +951,13 @@ label sister_instathot_label_mom(the_sister, the_mom):
     $ insta_outfit_mom = insta_wardrobe.pick_random_outfit()
     $ insta_outfit_sister = insta_wardrobe.pick_random_outfit()
 
+
     if insta_outfit_mom.name == insta_outfit_sister.name:
         $ the_group.draw_person(the_sister)
+        $ mc.change_locked_clarity(10)
         the_sister "I got us matching outfits, because I thought it would really show off the family resemblance."
         the_sister "It should make for a really cute shoot! Maybe [the_sister.mc_title] can tell us who wears it best."
+
 
     $ the_mom.apply_outfit(insta_outfit_mom)
     $ the_sister.apply_outfit(insta_outfit_sister)
@@ -960,6 +981,7 @@ label sister_instathot_label_mom(the_sister, the_mom):
     $ the_group.draw_person(the_mom)
     the_mom "Okay, I think I can do that..."
     $ the_group.draw_person(the_mom, position = "kneeling1", emotion = "happy")
+    $ mc.change_locked_clarity(20)
     "[the_mom.possessive_title] gets onto the bed with [the_sister.possessive_title]."
     mc.name "That's looking good you two, now look at me and smile."
     "You take a few pictures of them, moving around the bed to get a few different angles."
@@ -969,11 +991,13 @@ label sister_instathot_label_mom(the_sister, the_mom):
             "[the_mom.title] slides closer to [the_sister.title] on the bed."
             the_mom "Like this?"
             mc.name "A little more. Try putting your arms around her."
+            $ mc.change_locked_clarity(20)
             "[the_mom.possessive_title] slips behind [the_sister.possessive_title] and pulls her into a hug"
             the_mom "I haven't played with you like this since you were a kid [the_sister.title]!"
             $ the_group.draw_person(the_sister, position = "kneeling1", emotion = "happy")
             the_sister "Oh my god, you're so embarrassing [the_mom.title]!"
             $ the_group.draw_person(the_mom, position = "kneeling1", emotion = "happy")
+            $ mc.change_locked_clarity(20)
             the_mom "[the_mom.mc_title], make sure to get some shots of me embarrassing your sister."
             "She leans over [the_sister.title]'s shoulder and kisses her on the side of the cheek."
             $ the_mom.change_happiness(10)

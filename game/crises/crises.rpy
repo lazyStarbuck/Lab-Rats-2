@@ -414,6 +414,18 @@ label broken_AC_crisis_label():
                 $ broken_AC_crisis_update_sluttiness();
 
         "Tell everyone to strip down and keep working\n{color=#ff0000}{size=18}Requires: [casual_uniform_policy.name]{/color} (disabled)" if not casual_uniform_policy.is_active():
+                python:
+                    clarity_change = 0
+                    for person in mc.business.production_team:
+                        person.change_slut_temp(10, add_to_log = False)
+                        if the_person.outfit.vagina_visible():
+                            clarity_change += 10
+                        elif the_person.outfit.tits_visible():
+                            clarity_change += 5
+                        elif the_person.outfit.underwear_visible():
+                            clarity_change += 3
+                    mc.change_locked_clarity(clarity_change)
+                $ mc.log_event("All Production Staff: +10 Sluttiness","float_text_pink")
             pass
     $ clear_scene()
     $ the_group = None
@@ -562,6 +574,7 @@ label office_flirt_label():
 
     "She stops at a shelf and runs her finger along a row of binders, obviously looking for something. After a moment she moves down a shelf and checks there."
     "You watch as [the_person.title] searches row after row, going lower and lower each time. Soon she's bent over with her ass high in the air."
+    $ mc.change_locked_clarity(5)
 
     menu:
         "Get back to work":
@@ -570,6 +583,7 @@ label office_flirt_label():
         "Take a moment and enjoy the view":
             #We should have a random chance of her noticing you.
             "You sit back in your chair and take a moment to enjoy [the_person.possessive_title]'s ass wiggling at you."
+            $ mc.change_locked_clarity(10)
             if renpy.random.randint(0,100) < 50: #50/50 chance
                 the_person "[the_person.mc_title], can you help me find something?"
                 "[the_person.title] looks over her shoulder at you before you can look away."
@@ -583,6 +597,7 @@ label office_flirt_label():
                     "You get up and help [the_person.title] find the right binder."
                     the_person "Thank you [the_person.mc_title], don't be scared of watching me leave either."
                     "She winks at you and walks away, putting in extra effort to make her butt swing side to side as she goes."
+                    $ mc.change_locked_clarity(5)
                 else:
                     $ the_person.draw_person(emotion="angry")
                     the_person "Were staring at my ass this whole time?"
@@ -632,6 +647,7 @@ label office_flirt_label():
                 the_person "Do you like what you see? I didn't mean to put on a show, but if I'm already here..."
                 $ the_person.draw_person(position="walking_away")
                 "[the_person.possessive_title] spreads her legs and bends her knees, waving her ass side to side and up and down for you."
+                $ mc.change_locked_clarity(10)
                 #if she's wearing something on the bottom and the outfit isn't too slutty, take off her bottom bit.
                 if len(the_person.outfit.get_lower_ordered()) > 0: #ie. she's wearing something to take off
                     $ test_outfit = the_person.outfit.get_copy()
@@ -639,6 +655,7 @@ label office_flirt_label():
                     $ test_outfit.remove_clothing(the_item)
                     if the_person.judge_outfit(test_outfit):
                         the_person "I'm sure you'd like a better look, lets get this out of the way first."
+                        $ mc.change_locked_clarity(10)
                         "[the_person.title] stands up and pulls off her [the_item.name], dropping to the floor."
                         $ the_person.draw_animated_removal(the_item, position = "back_peek", emotion = "happy")
                         mc.name "Mmm, looking good [the_person.title]."
@@ -668,6 +685,7 @@ label office_flirt_label():
 
                     $ test_outfit = None
                     $ the_item = None
+                    $ mc.change_locked_clarity(10)
 
                 else:
                     "With nothing covering her up you're able to get a great look of [the_person.title]'s shapely butt. She works it around for a minute or two while you watch from your desk."
@@ -680,6 +698,7 @@ label office_flirt_label():
                     $ the_person.change_slut_temp(5)
                     $ the_person.draw_person(position="walking_away")
                     "She winks and walks past your desk, making sure to shake her ass as you watch."
+                    $ mc.change_locked_clarity(5)
 
             else:
                 #She's very slutty already.
@@ -687,6 +706,7 @@ label office_flirt_label():
                 "[the_person.title] looks over her shoulder and winks at you."
                 the_person "I'm glad you're enjoying the show, I'd hate to bend over like this and not have anyone notice."
                 "She reaches back and runs a hand over her ass, then spanks it lightly."
+                $ mc.change_locked_clarity(20)
                 the_person "Could you come over and help me look for something, please? I promise I'll repay the favour."
                 menu:
                     "Help her find what she's looking for":
@@ -694,6 +714,7 @@ label office_flirt_label():
                         "You get up from your desk and join [the_person.title] at the shelf. As soon as you get there she slides one of the binders out and holds it up."
                         the_person "Oh, it looks like I found it. Oh well, I still promised to pay you back..."
                         "She runs a finger down the front of your chest, then down to your crotch. She bites her lip and looks at you."
+                        $ mc.change_locked_clarity(10)
                         the_person "Come on, lets slip into the supply closet for a moment. Being watched like that gets me so worked up, I'll let you do whatever dirty things you want to me."
                         menu:
                             "Have sex with [the_person.title]":
@@ -728,6 +749,7 @@ label office_flirt_label():
                         $ the_person.change_obedience(2)
                         $ the_person.change_slut_temp(5)
                         "She winks and walks past your desk, making sure to shake her ass as you watch."
+                        $ mc.change_locked_clarity(10)
     $ clear_scene()
     return
 
@@ -1084,6 +1106,7 @@ label water_spill_crisis_label():
     $ the_person.call_dialogue("suprised_exclaim")
     "She tries to wipe the water off, but not before it's soaked through the front of her [the_clothing.name]."
     $ test_outfit = the_person.outfit.get_copy() #Make a copy, we'll try removing the wet item and reevaluating.
+    $ mc.change_locked_clarity(10)
     $ test_outfit.remove_clothing(the_clothing)
     $ thinks_appropriate = the_person.judge_outfit(test_outfit,10) #Does she think it's appropriate to strip off her top when it's wet?
     if not thinks_appropriate:
@@ -1104,8 +1127,10 @@ label water_spill_crisis_label():
             $ the_person.draw_animated_removal(the_clothing)
             if the_person.outfit.tits_visible():
                 "[the_person.title] strips off her [the_clothing.name], letting you get a nice good look at her [the_person.tits] sized tits."
+                $ mc.change_locked_clarity(30)
             else:
                 "[the_person.title] strips off her [the_clothing.name] and puts it to the side, then turns her attention back to you."
+                $ mc.change_locked_clarity(10)
             menu:
                 "Right, your taxes...":
                     the_person "I hope I'm not distracting you. I can dry my shirt off if you'd prefer."
@@ -1147,8 +1172,10 @@ label water_spill_crisis_label():
                     $ the_person.change_obedience(5)
                     if the_person.outfit.tits_visible() and the_person.outfit.vagina_visible():
                         "You help [the_person.possessive_title] with her tax questions while she stands next to your desk, her body completely on display."
+                        $ mc.change_locked_clarity(50)
                     else:
                         "You help [the_person.possessive_title] with her tax questions while she stands next to your desk, still partially undressed."
+                        $ mc.change_locked_clarity(30)
 
 
                 "Keep going... \n{color=#ff0000}{size=18}Requires: Minimal Coverage Corporate Uniforms{/size}{/color} (disabled)" if not minimal_coverage_uniform_policy.is_active():

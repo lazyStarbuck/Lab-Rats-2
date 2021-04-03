@@ -29,6 +29,7 @@ label grope_shoulder(the_person):
                 return False
 
 label grope_waist(the_person):
+    $ mc.change_locked_clarity(5)
     "You give her shoulder a light squeeze, then slide your hand down her back until it's resting on her waist."
     if the_person.effective_sluttiness("touching_body") < 10:
         $ the_person.call_dialogue("grope_body_reject")
@@ -96,6 +97,7 @@ label grope_waist(the_person):
                 return False
 
 label grope_ass(the_person):
+    $ mc.change_locked_clarity(10)
     if the_person.has_taboo("touching_body"):
         "Feeling bold, you step a little bit closer and slide your hand around behind [the_person.title]."
     else:
@@ -144,6 +146,7 @@ label grope_ass(the_person):
 
 
 label grope_tits(the_person):
+    $ mc.change_locked_clarity(15)
     if the_person.has_large_tits():
         "You keep one hand on [the_person.title]'s ass and bring the other up to her big tits. You cup one and massage it gently."
     else:

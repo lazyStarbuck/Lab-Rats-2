@@ -187,6 +187,7 @@ label meet_person_label():
             $ the_person.set_possessive_title(get_random_possessive_title(the_person))
             the_person "Thank you so much. I'm [the_person.title]."
             call person_introduction(the_person, girl_introduction = False) from _call_person_introduction_1
+            $ mc.change_locked_clarity(5)
             "You shake her hand. You and [the_person.title] chat while she waits for the next bus to come by."
             $ the_person.change_happiness(10)
             $ the_person.change_love(8)

@@ -5,6 +5,8 @@ label fuck_person(the_person, private = True, start_position = None, start_objec
         $ report_log = defaultdict(int) #Holds information about the encounter: what positiosn were tried, how many rounds it went, who came and how many times, etc. Defaultdict sets values to 0 if they don't exist when accessed
         $ report_log["positions_used"] = [] #This is a list, not an int.
 
+    $ creampie_counter = the_person.sex_record.get("Vaginal Creampies",0)
+
     $ finished = False #When True we exit the main loop (or never enter it, if we can't find anything to do)
     $ position_choice = None
     $ object_choice = None
@@ -455,7 +457,10 @@ label check_position_willingness(the_person, the_position, ignore_taboo = False,
 
     if the_person.effective_sluttiness(the_taboo) >= the_position.slut_requirement:
         if the_person.has_taboo(the_taboo):
+            pass #If there is a taboo being broken we have special taboo break dialogue called from the position.
+        else:
             $ the_person.call_dialogue("sex_accept")
+
     elif the_person.effective_sluttiness(the_taboo) + (the_person.obedience-100) >= the_position.slut_requirement:
         # She's willing to be commanded to do it. Reduce her happiness by the difference (increase arousal if she likes being submissive)
         "[the_person.possessive_title] doesn't seem enthusiastic, but a little forceful encouragement would probably convince her."
@@ -567,6 +572,7 @@ label sex_description(the_person, the_position, the_object, private = True, repo
         $ his_arousal_change += -2 # Condoms don't feel as good.
 
     $ mc.change_arousal(his_arousal_change)
+    $ mc.change_locked_clarity(the_position.guy_arousal * the_person.sex_skills[the_position.skill_tag]) #NOTE: This let's you end up with 0 clarity gain. Is that what we want?
     if mc.recently_orgasmed and mc.arousal >= 10:
         $ mc.recently_orgasmed = False
         "Your cock stiffens again, coaxed back to life by [the_person.title]."
@@ -591,15 +597,44 @@ label sex_description(the_person, the_position, the_object, private = True, repo
         $ report_log["girl orgasms"] += 1
 
 
-    if mc.arousal >= mc.max_arousal:
-        $ the_position.call_outro(the_person, mc.location, the_object)
-        if the_person.effective_sluttiness(the_position.associated_taboo) < the_position.slut_requirement: # bonus obedience if she if she had to be ordered to do this position ("I guess I really am just doing this for him...")
-            $ the_person.change_obedience(5 + the_person.get_opinion_score("being submissive"))
+    if mc.arousal >= 80: #NOTE: use to be mc.max_arousal, this number is now the threshold for being forced to cum.
+        $ is_cumming = False
+        if mc.arousal < mc.max_arousal: #TODO: Different dialogue based on your focus might make sense here.
+            menu:
+                "Try and cum early.":
+                    if renpy.random.randint(0,100) < 10*mc.focus + (mc.max_arousal - mc.arousal):
+                        $ is_cumming = True
+                        "You focus as hard as you can and feel yourself grow closer and closer to climax."
+                    else:
+                        "You focus as hard as you can, but you're unable to push yourself over the edge."
+
+                "Keep going!":
+                    pass
         else:
-            $ the_person.change_obedience(3)
-        $ mc.reset_arousal()
-        $ mc.recently_orgasmed = True
-        $ report_log["guy orgasms"] += 1
+            menu:
+                "Try to hold back.":
+                    if renpy.random.randint(0,100) < 10*mc.focus + (mc.max_arousal - mc.arousal): #Note: arousal is > max_arousal, so that's focus - some number, ie it's harder and harder as your arousal increases.
+                        "You focus yourself and stave off your climax for a little longer."
+                    else:
+                        "You focus as hard as you can, but there's nothing you can do at this point!"
+                        $ is_cumming = True
+
+                "Cum!":
+                    pass
+
+        if is_cumming:
+            $ the_position.call_outro(the_person, mc.location, the_object)
+            if the_person.effective_sluttiness(the_position.associated_taboo) < the_position.slut_requirement: # bonus obedience if she if she had to be ordered to do this position ("I guess I really am just doing this for him...")
+                $ the_person.change_obedience(5 + the_person.get_opinion_score("being submissive"))
+            else:
+                $ the_person.change_obedience(3)
+            $ mc.reset_arousal()
+            $ mc.recently_orgasmed = True
+            $ report_log["guy orgasms"] += 1
+            if the_person.sex_record.get("Vaginal Creampies", 0) > creampie_counter:
+                $ report_log["creampies"] += the_person.sex_record.get("Vaginal Creampies", 0) - creampie_counter #The positions determine how you can finish, so we need to go directly off of the character record.
+                $ creampie_counter = the_person.sex_record.get("Vaginal Creampies", 0)
+
 
     if not private:
         call watcher_check(the_person, the_position, the_object, report_log) from _call_watcher_check

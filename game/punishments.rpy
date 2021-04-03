@@ -332,6 +332,7 @@ label punishment_spank(the_person, the_infraction):
         "[the_person.title] follows your instructions without any hesitation."
     $ the_person.draw_person(position = "standing_doggy")
 
+    $ mc.change_locked_clarity(10)
 
     "You stand to the side of [the_person.possessive_title] and place one hand on her hip, ready to spank her with the other."
     #If she has a skirt on, option to pull it up.
@@ -352,6 +353,7 @@ label punishment_spank(the_person, the_infraction):
                 else:
                     "You grab the hem of [the_person.title]'s [top_clothing.display_name] and pull it up around her waist."
 
+                $ mc.change_locked_clarity(10)
                 $ the_person.draw_animated_removal(top_clothing, position = "standing_doggy", half_off_instead = True)
                 if not the_person.outfit.wearing_panties():
                     mc.name "No panties today, I see."
@@ -397,6 +399,7 @@ label spank_description(the_person, the_infraction):
         "Teach her a lesson":
             "You keep smacking her butt, putting more force behind your blow each time."
             if not_cushioned: #Ass gets red, she gets sore.
+                $ mc.change_locked_clarity(10)
                 "Her exposed ass jiggles with each hit, and quickly starts to turn red."
                 the_person "Ah... Am I almost done [the_person.mc_title]?"
 
@@ -430,6 +433,7 @@ label spank_description(the_person, the_infraction):
                     "You interrupt her with a slap on the ass. She takes a moment to collect herself before continuing."
                     the_person "I promise it won't happen again!"
 
+                $ mc.change_locked_clarity(10)
                 "You give her one last hit on her now red butt and then step back, letting her stand up."
                 $ the_person.outfit.restore_all_clothing()
                 $ the_person.draw_person()
@@ -451,6 +455,7 @@ label spank_description(the_person, the_infraction):
                 mc.name "Stand up, we're done here."
                 $ the_person.outfit.restore_all_clothing()
                 $ the_person.draw_person()
+                $ mc.change_locked_clarity(10)
                 "She turns around, rubbing her butt."
                 the_person "I'll get back to work..."
                 $ the_person.change_love(-1)
@@ -542,6 +547,7 @@ label punishment_underwear_only(the_person, the_infraction):
             the_person "Of course. Right away."
 
     $ generalised_strip_description(the_person, the_person.outfit.get_underwear_strip_list())
+    $ mc.change_locked_clarity(20)
     if the_person.update_outfit_taboos() or the_person.effective_sluttiness() < 40:
         "[the_person.possessive_title] blushes and tries to cover her body."
         the_person "This is so embarrassing..."
@@ -682,6 +688,7 @@ label punishment_strip_and_spank(the_person, the_infraction):
         mc.name "But first we need to ensure there's nothing that will get in my way. Strip naked."
         call strip_naked_command_helper(the_person, the_infraction) from _call_strip_naked_command_helper
         $ generalised_strip_description(the_person, the_person.outfit.get_full_strip_list(strip_feet = _return))
+        $ mc.change_locked_clarity(15)
         if the_person.update_outfit_taboos(): #Being nude has broken a taboo
             "[the_person.title] stands meekly in front of you, completely nude. She tries to cover herself up with her hands."
             mc.name "Hands down, there's no point hiding anything from me now."
@@ -707,6 +714,7 @@ label punishment_office_nudity(the_person, the_infraction):
 
         $ generalised_strip_description(the_person, the_person.outfit.get_full_strip_list(strip_feet = _return))
 
+        $ mc.change_locked_clarity(15)
         if the_person.update_outfit_taboos(): # Broke a taboo
             "[the_person.title] stands meekly in front of you, completely nude. She tries to cover herself up with her hands."
             mc.name "Hands down, there's no point hiding anything from me now."
@@ -862,6 +870,7 @@ label punishment_orgasm_denial(the_person, the_infraction):
     mc.name "...I'm going to disappoint you. I'm going to bring you right to the edge of cumming and leave you there."
     if the_person.effective_sluttiness() < 40:
         the_person "You can't... You aren't allowed to do that, are you?"
+        $ mc.change_locked_clarity(10)
         "You slide your hand from her hip down to her inner thigh."
         mc.name "Of course I can, punishments are all listed in the employee manual. Of course, if you'd prefer to quit I can walk you to the door."
         if reduced_coverage_uniform_policy.is_active():
@@ -871,6 +880,7 @@ label punishment_orgasm_denial(the_person, the_infraction):
         mc.name "Good girl. I won't make you wait any longer..."
     elif the_person.effective_sluttiness() < 80:
         the_person "Okay [the_person.mc_title], I'll take my punishment."
+        $ mc.change_locked_clarity(10)
         "You slide your hand from her hip down to her inner thigh."
         mc.name "Good girl."
     else:
@@ -878,6 +888,7 @@ label punishment_orgasm_denial(the_person, the_infraction):
         the_person "You wouldn't be that cruel, would you [the_person.mc_title]?"
         the_person "Come on, wouldn't it be better if we both enjoyed ourselves?"
         mc.name "I fully intend to enjoy myself with you, but you aren't going to get to cum."
+        $ mc.change_locked_clarity(10)
         "[the_person.possessive_title] pouts while you slide your hand from her hip down to her inner thigh."
         mc.name "So be a good girl and take your punishment."
 
@@ -893,6 +904,7 @@ label punishment_orgasm_denial(the_person, the_infraction):
             the_person "No [the_person.mc_title], you can't... You can't leave me like this!"
             "She moans desperately."
             if the_person.wants_creampie():
+                $ mc.change_locked_clarity(15)
                 the_person "Please, just fuck me and make me cum! You can cum inside of me, I don't care!"
                 the_person "I need it!"
                 $ the_person.add_situational_slut("orgasm denial", 20, "I was so close! I need to cum, I need to!")
@@ -900,6 +912,7 @@ label punishment_orgasm_denial(the_person, the_infraction):
                     "Fuck her":
                         mc.name "Beg for it."
                         the_person "Please, I... I want you to fuck me! Fuck me and cum inside me, I want it!"
+                        $ mc.change_locked_clarity(15)
                         the_person "Put that cock in me before I go crazy!"
                         call fuck_person(the_person, private = False, affair_ask_after = False) from _call_fuck_person_93
                         $ the_report = _return

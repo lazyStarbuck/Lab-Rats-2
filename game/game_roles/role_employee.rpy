@@ -214,6 +214,7 @@ label employee_pay_cash_bonus(the_person):
             "[the_person.title] takes the bills, momentarily stunned by the amount."
             if the_person.effective_sluttiness() > 40 and the_person.happiness > 100:
                 the_person "Wow... this is amazing sir. I'm sure there's something I can do to pay you back, right?"
+                $ mc.change_locked_clarity(5)
                 "She steps close to you and runs a finger down your chest."
                 $ the_person.add_situational_slut("situation", 10, "He's given me such a generous bonus, I should repay the favour!")
                 call fuck_person(the_person) from _call_fuck_person_3
@@ -362,13 +363,17 @@ label employee_performance_review(the_person):
                         else:
                             if the_person.effective_sluttiness() < 30: #Willing to show her tits.
                                 the_person "Wait, I really need this job! There must be something about me that's worth keeping around."
+                                $ mc.change_locked_clarity(5)
                                 the_person "Just tell me what it is and I'll show it to you..."
                             elif the_person.effective_sluttiness() < 45: #Willing to suck you off, jerk you off.
                                 the_person "I can be very convincing [the_person.mc_title]."
+                                $ mc.change_locked_clarity(5)
                                 the_person "Just tell me what I need to do and I'll do it."
                             elif the_person.effective_sluttiness() < 60: #Willing to fuck you
+                                $ mc.change_locked_clarity(5)
                                 the_person "I don't think my value here is really captured by performance quotas... Let me remind you why you really keep me around."
                             else:
+                                $ mc.change_locked_clarity(10)
                                 the_person "I'm not just here for the job though, I'm here for you [the_person.mc_title]."
                                 the_person "What do I need to do to convince you to keep me around? I'll do anything at all for you."
 
@@ -430,12 +435,14 @@ label employee_performance_review(the_person):
                                         mc.name "Not yet. Turn around, I want to get a look at your ass."
                                         mc.name "And stop trying to cover yourself up. The point is for me to look at you, right?"
                                         $ the_person.draw_person(position = "back_peek")
+                                        $ mc.change_locked_clarity(10)
                                         "[the_person.possessive_title] reluctantly follows your instructions, letting her hands drop to her sides and turning around."
                                         "She stands rigidly at first, but as the seconds tick by silently seems to grow more comfortable."
                                     else:
                                         the_person "Well, now what?"
                                         the_person "Turn around, let me take a look at your ass."
                                         $ the_person.draw_person(position = "back_peek", the_animation = ass_bob, animation_effect_strength = 0.4)
+                                        $ mc.change_locked_clarity(10)
                                         "[the_person.possessive_title] obediently follows your instructions. She bounces her hips, jiggling her butt as you oggle her."
 
                                     mc.name "Okay, that's enough."
@@ -461,6 +468,7 @@ label employee_performance_review(the_person):
                                         the_person "You want me to give you a... handjob?"
                                         $ the_person.draw_person(position = "stand3")
                                         "[the_person.possessive_title] seems unsure, but she takes a few shaky steps towards you."
+                                        $ mc.change_locked_clarity(5)
                                         the_person "And if I do this you won't fire me?"
                                         mc.name "That's the deal. Come on, it doesn't bite."
                                     else:
@@ -468,6 +476,7 @@ label employee_performance_review(the_person):
                                         $ the_person.draw_person(position = "stand3")
                                         "She walks to your side of the desk, eyes fixed on your cock."
                                         mc.name "That's the deal. It doesn't seem too hard, does it?"
+                                        $ mc.change_locked_clarity(10)
                                         the_person "Oh, that looks plenty hard... Fine, I'll do it."
 
                                     #TODO: We really need a sitting and kneeling handjob pose.
@@ -482,6 +491,7 @@ label employee_performance_review(the_person):
                                         mc.name "Hey, it's not that little."
                                         the_person "It's certainly not..."
 
+                                    $ mc.change_locked_clarity(10)
                                     "[the_person.title] starts to stroke it, rhythmically running her hand up and down your length."
                                     call fuck_person(the_person, private = True, start_position = handjob, start_object = make_floor(), girl_in_charge = True, skip_intro = True, position_locked = True) from _call_fuck_person_12
                                     $ the_report = _return
@@ -517,6 +527,7 @@ label employee_performance_review(the_person):
                                     mc.name "Alright then, I'll make you a deal."
                                     the_person "Thank you [the_person.mc_title]! What do I need to do?"
                                     "You unzip your pants and pull out your hardening cock."
+                                    $ mc.change_locked_clarity(10)
                                     mc.name "I want you to suck me off. Do a good job and I'll let you keep your job."
                                     if the_person.has_taboo("sucking_cock"):
                                         the_person "You want a blowjob?"
@@ -526,6 +537,7 @@ label employee_performance_review(the_person):
                                         "You motion her closer, and she takes a few unsteady steps."
                                         mc.name "Get on your knees. Don't worry, it doesn't bite."
                                         $ the_person.draw_person(position = "kneeling1")
+                                        $ mc.change_locked_clarity(10)
                                         "[the_person.possessive_title] nods and drops down in front of you."
                                         $ the_person.break_taboo("sucking_cock")
                                     else:
@@ -534,6 +546,7 @@ label employee_performance_review(the_person):
                                         "She takes a few steps closer."
                                         mc.name "Get on your knees, I'm getting a little impatient."
                                         $ the_person.draw_person(position = "kneeling1")
+                                        $ mc.change_locked_clarity(5)
                                         "[the_person.possessive_title] nods and drops down in front of you."
 
                                     the_person "Just... a blowjob, right?"
@@ -541,6 +554,7 @@ label employee_performance_review(the_person):
 
                                     "You present your cock, and she leans forward to take it in her mouth."
                                     $ the_person.draw_person(position = "blowjob")
+                                    $ mc.change_locked_clarity(10)
                                     "She sucks on the tip for a few moments, then slides you deeper into her mouth."
 
                                     if the_person.get_opinion_score("being submissive") > 0:
@@ -587,6 +601,7 @@ label employee_performance_review(the_person):
                                     the_person "Yes [the_person.mc_title], whatever you want."
 
                                     $ generalised_strip_description(the_person, the_person.outfit.get_full_strip_list(strip_feet = remove_shoes))
+                                    $ mc.change_locked_clarity(10)
                                     the_person "Now what?"
                                     "You slide your chair back from your desk and stand up."
                                     mc.name "Now let's see just how committed you are to this job."
@@ -595,6 +610,7 @@ label employee_performance_review(the_person):
                                     $ the_person.draw_person("standing_doggy")
                                     "She follows your instructions obediently, bending over to plant her palms on your desk."
                                     the_person "What are you going to do?"
+                                    $ mc.change_locked_clarity(10)
                                     "You walk behind [the_person.title] and unzip your pants. When you pull them down your hard cock springs out and bounces against an ass cheek."
                                     mc.name "I'm going to fuck you. That's not a problem, is it?"
                                     "You hold your shaft and rub the tip of your cock between her legs."
@@ -623,6 +639,7 @@ label employee_performance_review(the_person):
                                                     mc.name "You've got two choices [the_person.title]."
                                                     mc.name "You can walk out of this room unemployed, or you can walk out with a pussy full of my cum."
                                                     "You tap the tip of your cock on her clit, teasing her while she thinks."
+                                                $ mc.change_locked_clarity(10)
                                                 the_person "... Fine... Just this once."
                                                 $ the_person.change_obedience(1 + the_person.get_opinion_score("being submissive"))
                                                 mc.name "Good girl, that's what I like to hear."

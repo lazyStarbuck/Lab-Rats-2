@@ -121,6 +121,7 @@ label uniform_disobedience_event(planned_uniform, the_person):
 
             $ generalised_strip_description(the_person, the_person.outfit.get_full_strip_list(strip_feet = True, strip_accessories = True))
 
+            $ mc.change_locked_clarity(10)
             "Once stripped down [the_person.possessive_title] puts on her uniform."
             $ the_person.set_uniform(planned_uniform, wear_now = True)
             $ the_person.draw_person()

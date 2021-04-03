@@ -368,6 +368,7 @@ label mom_flirt_response_low(the_person):
     the_person "Aww, thank you [the_person.mc_title]. I'm really not wearing anything special though."
     mc.name "Well you're looking good, that's all I know."
     the_person "You're so sweet. Come here!"
+    $ mc.change_locked_clarity(5)
     "[the_person.possessive_title] opens her arms up and gives you a warm, motherly hug."
 
     return
@@ -380,6 +381,7 @@ label mom_flirt_response_mid(the_person):
         mc.name "That doesn't make me blind. I'm just telling you what I see [the_person.title], it's supposed to be a compliment."
         "She sighs and smiles."
         the_person "Well then thank you for the compliment. Come here."
+        $ mc.change_locked_clarity(10)
         "[the_person.possessive_title] gives you a quick, motherly hug."
         the_person "You're always so good to me. I love you."
         mc.name "I love you too [the_person.title]."
@@ -390,6 +392,7 @@ label mom_flirt_response_mid(the_person):
         mc.name "If you did you've put it in all the right places. Turn around for me."
         "[the_person.possessive_title] raises an eyebrow and hesitates, then shrugs and turns around for you."
         $ the_person.draw_person(position = "back_peek")
+        $ mc.change_locked_clarity(10)
         the_person "Like this?"
         mc.name "Just like that. Look, have great hips and a fantastic ass. You should be showing them off more."
         $ the_person.draw_person()
@@ -404,6 +407,7 @@ label mom_flirt_response_high(the_person):
             the_person "You should be thinking about women your own age. Isn't there anyone else you think is pretty?"
             mc.name "You're the most beautiful woman I know [the_person.title]. No matter how much I try I can't get you out of my head."
             the_person "Aww... I suppose I can't be too angry at you then. Come here."
+            $ mc.change_locked_clarity(5)
             "She opens her arms up and pulls you into a hug. After a quick squeeze she steps back to arms length and smiles, looking into your eyes."
             the_person "No matter what you're always going to be my amazing little boy."
             menu:
@@ -422,6 +426,7 @@ label mom_flirt_response_high(the_person):
                     mc.name "And you'll always be my beautiful, loving mom."
                     "[the_person.possessive_title] smiles warmly and hugs you again. This time you let your hands slide down her back and rest them on her ass."
                     the_person "You shouldn't... Oh what's the harm. Go ahead, give it a squeeze."
+                    $ mc.change_locked_clarity(10)
                     "You grab [the_person.possessive_title]'s ass and massage it gently. She sighs softly into your ear as you play with her."
                     the_person "Okay... That's enough for now. I don't want you getting too excited."
                     mc.name "Okay [the_person.title]."
@@ -512,12 +517,60 @@ label mom_flirt_response_text(the_person):
             the_person "Try to come home at a reasonable hour tonight. You're working yourself to the bone."
     return
 
+label mom_condom_demand(the_person):
+    if the_person.get_opinion_score("bareback sex") > 0 or the_person.get_opinion_score("creampies") > 0:
+        the_person "Oh [the_person.mc_title], you need to put on a condom before we can do anything."
+        the_person "You might get carried away without one, and we can't have that happen."
+    else:
+        the_person "[the_person.mc_title], do you have a condom? You're going to need to put one on."
+        the_person "If you don't have one we could do something else."
+    return
+
+label mom_condom_ask(the_person):
+    if the_person.on_birth_control:
+        the_person "Now [the_person.mc_title], I'm birth control. We really should still use protection though."
+        the_person "Do you have a condom with you? I hope you're always prepared."
+        $ the_person.update_birth_control_knowledge()
+    elif the_person.get_opinion_score("creampies") > 0:
+        the_person "Do you have a condom to put on? I don't want you to have to pull out when you finish."
+        $ the_person.discover_opinion("creampies")
+    else:
+        the_person "You should really put on a condom [the_person.mc_name]."
+        the_person "I trust you, but it's so easy for accidents to happen when we're... distracted."
+    return
+
+label mom_condom_bareback_ask(the_person):
+    if the_person.get_opinion_score("creampies") > 0:
+        if the_person.on_birth_control:
+            the_person "You don't need to use any protection [the_person.mc_title]. I'm on birth control."
+            the_person "That means you can cum right inside my pussy if you want. I'd like it very much if you did."
+            $ the_person.update_birth_control_knowledge()
+        else:
+            the_person "You don't need to use any protection [the_person.mc_title]."
+            the_person "I would love it if you came inside me, even with the risks."
+        $ the_person.discover_opinion("creampies")
+    else:
+        the_person "You don't need any protection with me [the_person.mc_title]."
+        the_person "I want you to have the best time possible, even if it's a little risky..."
+    return
+
+label mom_condom_bareback_demand(the_person):
+    #Just likes raw sex
+    if the_person.on_birth_control:
+        the_person "Don't bother with that. I'm on birth control, so we don't need to worry."
+        the_person "I want you to fuck me [the_person.mc_title], and I want you to do it raw!"
+        $ the_person.update_birth_control_knowledge()
+    else:
+        the_person "Don't bother with that, I want you just the way you are."
+        the_person "Go ahead [the_person.mc_title], put it inside of me!"
+    return
+
 label mom_cum_face(the_person):
     if the_person.obedience > 130:
         if the_person.sluttiness > 50:
             the_person "Ah... is this what you like to see [the_person.mc_title]? I hope you had a good time."
         else:
-            the_person "Oh, it's everywhere! I... I just hope you had a good time [the_person.mc_title]. I'm doing this all for you."
+            the_person "Oh, it's everywhere! I... I just hope you had a good time sweetheart. I'm doing this all for you."
     else:
         if the_person.sluttiness > 70:
             the_person "Oh, you got it all over me. I hope that means you had a good time!"
@@ -786,11 +839,13 @@ label mom_date_seduction(the_person):
     if the_person.sluttiness > the_person.love:
         if the_person.sluttiness > 40:
             "When you get home your mother takes your hand and starts to lead you through the house."
+            $ mc.change_locked_clarity(20)
             the_person "You've shown me such a good time tonight. Come with me and I think I can show you a few things too."
         else:
             "When you get home your mother takes your hand and holds it in hers."
             the_person "You were a perfect gentleman tonight [the_person.mc_title]. I think you've earned this."
             "She leans forward and kisses you on the lips. She lingers there for a couple of seconds before pulling back and sighing."
+            $ mc.change_locked_clarity(10)
             the_person "Would you... like to come to my room and share a quick drink before I get to bed? Maybe you could tuck me in too."
     else:
         if the_person.love > 40:
@@ -798,10 +853,12 @@ label mom_date_seduction(the_person):
             "When you get home your mother takes your hand and holds it in both of hers."
             the_person "I had such a wonderful time tonight. You make me feel so young and alive."
             "She leans in and kisses you on the cheek. She lingers there for a second, her breath warm on our ear."
+            $ mc.change_locked_clarity(20)
             the_person "Would you like to share a drink in my room before we head to bed? "
         else:
             the_person "Sweetheart..."
             "When you get home your mother gets your attention. She leans over and kisses you on the cheek."
+            $ mc.change_locked_clarity(10)
             the_person "You've been a wonderful date. Would you like to share a drink with me before we head to bed?"
     return
 

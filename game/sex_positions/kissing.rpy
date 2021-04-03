@@ -214,9 +214,12 @@ label outro_kissing(the_girl, the_location, the_object):
         "Her soft moans and eager movement make you even more excited. You're grinding your own hips against hers now, rubbing your erection against her through your pants."
     else:
         "You're grinding your own hips against hers now, rubbing your erection against her through your pants."
+    $ climax_controller = ClimaxController(["Cum your pants.", "air"])
+    $ the_choice = climax_controller.show_climax_menu()
     "You finally let out a low moan and hold [the_girl.possessive_title] close. A shiver runs up your spine as your climax, shooting your load out into your underwear."
     $ kissing.current_modifier = None
     $ kissing.redraw_scene(the_girl)
+    $ climax_controller.do_clarity_release(the_girl)
     "It takes a moment for you to recover from your orgasm. Once you're able to you step back and smooth out your shirt, the crotch of your pants uncomfortably wet now."
     return
 

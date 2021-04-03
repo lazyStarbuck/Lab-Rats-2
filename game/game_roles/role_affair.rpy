@@ -76,6 +76,7 @@ label plan_fuck_date_label(the_person):
     menu:
         "Plan a date for Thursday night":
             mc.name "Good, I'll be there."
+            $ mc.change_locked_clarity(10)
             the_person "I'll be ready and waiting."
             "She winks at you and smiles."
             $ add_plan_fuck_date_action(the_person)
@@ -143,6 +144,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
     if the_person.obedience > 130 or the_person.get_opinion_score("being submissive") > 0 or the_person.get_opinion_score("giving blowjobs") > 0:
         #She's on her knees and ready to suck you off as soon as you come in.
         $ the_person.draw_person(position = "kneeling1")
+        $ mc.change_locked_clarity(20)
         the_person "Hello, I'm ready for you [the_person.mc_title]..."
         "She licks her lips and watches you from her knees."
         the_person "Don't waste any time, I want you in my mouth."
@@ -151,6 +153,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
     else:
         #She's standing and ready to make out as soon as you come in."
         $ the_person.draw_person()
+        $ mc.change_locked_clarity(10)
         the_person "Hello [the_person.mc_title]... I've been thinking about this all day."
         "You step inside. She reaches past you and closes the bedroom door." #Note that you never end up with submissive people down this branch
         "She wastes no time wrapping her arms around you and kissing you."
@@ -316,6 +319,8 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
 
                                 if not mc.condom:
                                     $ the_person.break_taboo("condomless_sex")
+
+                                $ mc.change_locked_clarity(20)
                                 "You don't waste any time, ramming your cock home. [the_person.title] gasps as you bottom out inside her warm cunt, then start to pump back and forth."
                                 "You hear [the_person.title]'s [so_title] come inside and close the door."
                                 the_person.SO_name "I'm home! Good news, the client pushed the project back so I'll be out late less often!"
@@ -325,12 +330,15 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                 "She moans into the bed. You can hear her [so_title] approaching the bedroom and speed up."
                                 "The bedroom door opens and [the_person.title] glances up at it."
                                 the_person.SO_name "Are you in here sweetheart... Oh my..."
+                                $ mc.change_locked_clarity(20)
                                 the_person "I'm so sorry, you weren't supposed to see me like this! Oh my god I'm so sorry!"
                                 "Her [so_title] freezes in the door, eyes wide, transfixed by what he's seeing. [the_person.title] lifts herself up onto her arms."
+                                $ mc.change_locked_clarity(20)
                                 the_person "I'm sorry, but he just makes me feel so good! His cock drives me mad and it's all I can think about!"
                                 "You hold onto her hips and fuck her from behind. Her [so_title] just stares."
                                 mc.name "You should go, there's nothing for you here."
                                 the_person.SO_name "Honey... I..."
+                                $ mc.change_locked_clarity(20)
                                 the_person "He's right, you don't need to be here to see this. I'm sorry!"
                                 "You give her ass a hard smack. [the_person.title] lowers her head and moans."
                                 the_person "All I want is his cock!"
@@ -375,12 +383,14 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                 #Basically an extended intro.
                                 "You shuffle across [the_person.title]'s bed while she is talking and wrap your arms around her torso. She places a hand on your forearm and caresses it."
                                 the_person "Yeah? You don't say... Uh huh... Mhmm."
+                                $ mc.change_locked_clarity(15)
                                 if the_person.has_large_tits():
                                     "You cup her tits and squeeze them together, then slide your hands down her chest and stomach toward her waist."
                                 else:
                                     "You run your hands over her tits, stomach, and then down toward her waist."
                                 the_person "Ah... Oh, it's nothing sweetheart. I'm just lying down in bed and it feels nice to be off my feet."
                                 "You kneel on the bed behind [the_person.possessive_title] and move your hands lower. You stroke her inner thighs and she opens her legs for you."
+                                $ mc.change_locked_clarity(10)
                                 "Your hand finally slides over her pussy, gently brushing her clit, and she moves the phone away from her face to moan softly."
                                 the_person "Hmm? Yes, I'm still here. Just yawning. I think it's time for bed."
                                 "You slide a finger into her pussy and she holds her breath for a second."
@@ -391,6 +401,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                 "She hangs up quickly and moans in relief."
                                 the_person "Oh god, you're so bad!"
                                 "[the_person.title] laughs and sits back into your arms."
+                                $ mc.change_locked_clarity(20)
                                 the_person "Now come here and fuck me!"
                                 call fuck_person(the_person, private = True) from _call_fuck_person_38
                                 $ the_report = _return
@@ -406,15 +417,18 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                     "[the_person.title] rolls her eyes and holds up a finger, moving the phone back to her face."
                                     the_person "I'm back. Go ahead, tell me all about it."
                                     $ the_person.break_taboo("sucking_cock")
+                                    $ mc.change_locked_clarity(20)
                                     "Then she moves it away again and leans forward, kissing the tip of your cock before sliding it past her lips."
                                 else:
                                     the_person "Yeah? You don't say.... Uh huh?"
+                                    $ mc.change_locked_clarity(20)
                                     "You brush her cheek with the back of your hand. She pivots her phone away from her face and leans forward, opening her mouth and kissing the tip of your cock."
                                     "She looks up at you from her sitting position while her tongue works around the tip in circles."
                                 the_person "Mhmm? Mmmm. Hmmm. Uhmmmm."
                                 "She mumbles responses to her [so_title] as she takes your cock deeper into her mouth. You can hear his voice on the other side of the phone, tinny and far away."
                                 "With a soft, wet smack she slides back off and takes a breath."
                                 the_person "Of course everything is fine. I'm just having something to eat before bed. That might be what you're hearing."
+                                $ mc.change_locked_clarity(20)
                                 "She licks the bottom of your dick and winks at you."
                                 the_person "Mhmm, it's delicious. I can't wait to get into bed though, it's been a long day."
                                 the_person "I love you too, goodnight sweetheart."
@@ -424,6 +438,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
 
                             "Fuck her while she's talking" if the_person.effective_sluttiness("vaginal_sex") >= 80:
                                 #This is basically an extended intro
+                                $ mc.change_locked_clarity(20)
                                 "You shuffle behind [the_person.title] and wrap your arms around her, grabbing a tit with one hand while the other slides down to her waist and caresses her pussy."
                                 the_person "Yeah? You don't say... Uh huh?"
                                 "With a little bit of pressure on her shoulders you guide [the_person.possessive_title] down onto her back."
@@ -445,6 +460,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                     $ wanted_condom = True
                                     "She pauses and points towards your cock and mouthing \"C-O-N-D-O-M\""
                                 else:
+                                    $ mc.change_locked_clarity(10)
                                     "She reaches down with her free hand and strokes your hard cock, sliding the tip against her wet slit."
 
                                 menu:
@@ -460,6 +476,7 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
                                         if wanted_condom:
                                             "You hold a finger up to your lips, reminding her to be quiet, and slide into her anyway."
                                             $ the_person.change_obedience(2 + the_person.get_opinion_score("bareback sex"))
+                                            $ mc.change_locked_clarity(20)
                                             "Her eyes go wide as your hard dick slides into her raw pussy. She glares up at you, but has to snap her attention back to her [so_title]."
                                         else:
                                             "She closes her eyes and bites her lip as your hard dick slides into her raw pussy. She's barely able to keep her voice together while talking to her [so_title]."
@@ -467,11 +484,13 @@ label fuck_date_event(the_person): #A breakout function so we can call the fuck_
 
                                 $ the_person.break_taboo("vaginal_sex")
                                 the_person "Mmmhm? Oh sweetheart, it sounds like you're having a long hard day"
+                                $ mc.change_locked_clarity(20)
                                 "She holds the phone to her chest and turns her head to the side as you start to pump into her. You hear the tinny voice of her [so_title] through the cellphone speaker."
                                 "She moans softly, then lifts the phone back to her face."
                                 the_person "Everything's more than fine here. I'm just really tired. I think I'm going to have to go to bed..."
                                 the_person "... Okay... I love you too! Bye!"
                                 "She finally hangs up and practically throws the phone away from her."
+                                $ mc.change_locked_clarity(20)
                                 the_person "Oh fuck, you're crazy [the_person.mc_title]! What if we get caught?"
                                 mc.name "We'll deal with that if it happens. Just relax and enjoy."
 
@@ -575,6 +594,7 @@ label caught_affair_cheating_label(the_other_girl, the_girlfriend):
         mc.name "Alright, I'll do that if it makes you happy."
         $ the_girlfriend.change_obedience(3)
         the_girlfriend "Thank you. And come on, you know if you ever need a little fun you can just find me, right?"
+        $ mc.change_locked_clarity(5)
         "She gives you a smile and a wink before walking away."
 
     $ clear_scene()
