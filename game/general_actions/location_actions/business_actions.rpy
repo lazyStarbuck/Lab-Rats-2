@@ -1,7 +1,7 @@
 init 0 python:
     def sleep_action_requirement():
         if time_of_day != 4:
-            return "Too early to sleep."
+            return "Too early to sleep"
         else:
             return True
 
@@ -10,49 +10,50 @@ init 0 python:
 
     def hr_work_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
+            return "Too late to work"
         else:
             return True
 
     def research_work_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
-        elif mc.business.active_research_design == None:
-            return "No research project set."
+            return "Too late to work"
+        elif mc.business.active_research_design is None:
+            return "No research project set"
         else:
             return True
 
     def supplies_work_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
+            return "Too late to work"
         else:
             return True
 
     def market_work_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
-        else:
-            return True
+            return "Too late to work"
+        elif mc.business.sale_inventory.get_any_serum_count() == 0:
+            return "Nothing to sell"
+        return True
 
     def production_work_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
+            return "Too late to work"
         elif len(mc.business.serum_production_array) == 0:
-            return "No serum design set."
+            return "No serum design set"
         else:
             return True
 
     def interview_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
+            return "Too late to work"
         elif mc.business.get_employee_count() >= mc.business.max_employee_count:
-            return "At employee limit."
+            return "At employee limit"
         else:
             return True
 
     def serum_design_action_requirement():
         if time_of_day >= 4:
-            return "Too late to work."
+            return "Too late to work"
         else:
             return True
 
@@ -78,7 +79,7 @@ init 0 python:
         if mc.business.head_researcher is not None:
             return False
         elif __builtin__.len(mc.business.research_team) == 0:
-            return "Nobody to pick."
+            return "Nobody to pick"
         else:
             return True
 
@@ -88,7 +89,7 @@ init 0 python:
         elif not public_advertising_license_policy.is_active():
             return False
         elif mc.business.get_employee_count() == 0:
-            return "Nobody to pick."
+            return "Nobody to pick"
         else:
             return True
 
@@ -97,7 +98,7 @@ init 0 python:
 
     def set_serum_requirement():
         if daily_serum_dosage_policy.is_owned() and not daily_serum_dosage_policy.is_active():
-            return "Policy not active."
+            return "Policy not active"
         else:
             return daily_serum_dosage_policy.is_active()
 
@@ -226,63 +227,41 @@ label hire_select_process(candidates):
 
 
 label hire_someone(new_person, add_to_location = False): # Breaks out some of the functionality of hiring someone into an independent lable.
-    python:
-        new_person.event_triggers_dict["employed_since"] = day
-        mc.business.listener_system.fire_event("new_hire", the_person = new_person)
-        new_person.add_role(employee_role)
-        for other_employee in mc.business.get_employee_list():
-            town_relationships.begin_relationship(new_person, other_employee) #They are introduced to everyone at work, with a starting value of "Acquaintance"
-
-    "You complete the nessesary paperwork and hire [_return.name]. What division do you assign them to?"
+    "You complete the necessary paperwork and hire [new_person.name]. What division do you assign them to?"
     menu:
-        "Research and Development.":
-            $ mc.business.add_employee_research(new_person)
-            $ new_person.set_work(mc.business.r_div)
-            if add_to_location:
-                $ mc.business.r_div.add_person(new_person)
+        "Research and Development":
+            $ mc.business.add_employee_research(new_person, add_to_location)
 
-        "Production.":
-            $ mc.business.add_employee_production(new_person)
-            $ new_person.set_work(mc.business.p_div)
-            if add_to_location:
-                $ mc.business.p_div.add_person(new_person)
+        "Production":
+            $ mc.business.add_employee_production(new_person, add_to_location)
 
-        "Supply Procurement.":
-            $ mc.business.add_employee_supply(new_person)
-            $ new_person.set_work(mc.business.s_div)
-            if add_to_location:
-                $ mc.business.s_div.add_person(new_person)
+        "Supply Procurement":
+            $ mc.business.add_employee_supply(new_person, add_to_location)
 
-        "Marketing.":
-            $ mc.business.add_employee_marketing(new_person)
-            $ new_person.set_work(mc.business.m_div)
-            if add_to_location:
-                $ mc.business.m_div.add_person(new_person)
+        "Marketing":
+            $ mc.business.add_employee_marketing(new_person, add_to_location)
 
-        "Human Resources.":
-            $ mc.business.add_employee_hr(new_person)
-            $ new_person.set_work(mc.business.h_div)
-            if add_to_location:
-                $ mc.business.h_div.add_person(new_person)
+        "Human Resources":
+            $ mc.business.add_employee_hr(new_person, add_to_location)
 
     return
 
 label serum_design_action_description:
-    $counter = len(list_of_traits)
     hide screen main_ui
     hide screen phone_hud_ui
     hide screen business_ui
     call screen serum_design_ui(SerumDesign(),[]) #This will return the final serum design, or None if the player backs out.
-    $ my_return_serum = _return
+    $ the_serum = _return
 
     show screen phone_hud_ui
     show screen business_ui
     show screen main_ui
-    if not my_return_serum == "None":
+    if not the_serum == "None":
         $ name = renpy.input("Please give this serum design a name.")
-        $ my_return_serum.name = name
-        $ mc.business.add_serum_design(my_return_serum)
-        $ mc.business.listener_system.fire_event("new_serum", the_serum = my_return_serum)
+        $ the_serum.name = name
+        $ mc.business.add_serum_design(the_serum)
+        $ mc.business.listener_system.fire_event("new_serum", the_serum = the_serum)
+        $ the_serum = None
         call advance_time from _call_advance_time_7
     else:
         "You decide not to spend any time designing a new serum type."
@@ -292,10 +271,15 @@ label research_select_action_description:
     hide screen main_ui
     hide screen phone_hud_ui
     hide screen business_ui
-    call screen research_select_ui
+    call screen serum_select_ui
     show screen phone_hud_ui
     show screen business_ui
     show screen main_ui
+    if not _return == "None":
+        $mc.business.set_serum_research(_return)
+        "You change your research to [_return.name]."
+    else:
+        "You decide to leave your lab's current research topic as it is."
     return
 
 label production_select_action_description: #TODO: Change this to allow you to select which line of serum you are changing!
@@ -366,7 +350,7 @@ label pick_supply_goal_action_description:
     return
 
 label policy_purchase_description:
-    call screen policy_selection_screen()
+    call screen policy_selection_screen_v2() #policy_selection_screen
     return
 
 label head_researcher_select_description:
@@ -374,14 +358,13 @@ label head_researcher_select_description:
     $ new_head = _return
     $ mc.business.head_researcher = new_head
     $ new_head.add_role(head_researcher)
+    $ del new_head
     return
 
 label pick_company_model_description:
     call screen employee_overview(person_select = True)
-    $ new_model = _return
-    if new_model is not None:
-        $ mc.business.company_model = new_model
-        $ new_model.add_role(company_model_role)
+    if not _return is None:
+        $ mc.business.hire_company_model(_return)
     return
 
 label set_uniform_description:
@@ -394,42 +377,42 @@ label set_uniform_description:
     $ uniform_mode = None
     $ uniform_type = None
     menu:
-        "Add a complete outfit." if not limited_to_top:
+        "Add a complete outfit" if not limited_to_top:
             $ uniform_mode = "full"
 
-        "Add a complete outfit.\n{size=22}Requires: Reduced Coverage Corporate Uniforms{/size} (disabled)" if limited_to_top:
+        "Add a complete outfit\n{color=#ff0000}{size=18}Requires: Reduced Coverage Corporate Uniforms{/size}{/color} (disabled)" if limited_to_top:
             pass
 
-        "Add an overwear set.":
+        "Add an overwear set":
             $ uniform_mode = "over"
 
-        "Add an underwear set." if not limited_to_top:
+        "Add an underwear set" if not limited_to_top:
             $ uniform_mode = "under"
 
-        "Add an underwear set.\n{size=22}Requires: Reduced Coverage Corporate Uniforms{/size} (disabled)" if limited_to_top:
+        "Add an underwear set\n{color=#ff0000}{size=18}Requires: Reduced Coverage Corporate Uniforms{/size}{/color} (disabled)" if limited_to_top:
             pass
 
-        "Remove a uniform or set.":
+        "Remove a uniform or set":
             $ uniform_mode = "delete"
 
 
     menu:
-        "Company Wide Uniforms.\n{size=22}Can be worn by everyone.{/size}": #Get the wardrobe we are going to be modifying.
+        "Company Wide Uniforms\n{color=#ff0000}{size=18}Can be worn by everyone{/size}{/color}": #Get the wardrobe we are going to be modifying.
             $ selected_div = mc.business.all_uniform
 
-        "R&D Uniforms.":
+        "R&D Uniforms":
             $ selected_div = mc.business.r_uniform
 
-        "Production Uniforms.":
+        "Production Uniforms":
             $ selected_div = mc.business.p_uniform
 
-        "Supply Procurement Uniforms.":
+        "Supply Procurement Uniforms":
             $ selected_div = mc.business.s_uniform
 
-        "Marketing Uniforms.":
+        "Marketing Uniforms":
             $ selected_div = mc.business.m_uniform
 
-        "Human Resources Uniforms.":
+        "Human Resources Uniforms":
             $ selected_div = mc.business.h_uniform
 
     if uniform_mode == "delete":
@@ -473,30 +456,30 @@ label set_serum_description: #TODO: Add a special screen for all of this instead
     $ selected_serum = None
 
     menu:
-        "All.":
+        "All":
             $ selected_div = "All"
 
-        "Research and Development.":
+        "Research and Development":
             $ selected_div = "R"
 
-        "Production.":
+        "Production":
             $ selected_div = "P"
 
-        "Supply Procurement.":
+        "Supply Procurement":
             $ selected_div = "S"
 
-        "Marketing.":
+        "Marketing":
             $ selected_div = "M"
 
-        "Human Resources.":
+        "Human Resources":
             $ selected_div = "H"
 
     menu:
-        "Pick a new serum.":
+        "Pick a new serum":
             call screen serum_inventory_select_ui(mc.business.inventory)
             $ selected_serum = _return
 
-        "Clear existing serum.":
+        "Clear existing serum":
             $ selected_serum = None
 
     if selected_serum == "None": #IF we didn't select an actual serum, just return and don't chagne anything.

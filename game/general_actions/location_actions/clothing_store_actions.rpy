@@ -1,4 +1,4 @@
-label wardrobe_import():
+label wardrobe_import(): #TODO: Figure out where we want to put this. Might be interesting to embed this at the clothing store as a location option.
     $ list_of_xml_files = []
     # Build a list of all possible files inside of the imports file.
     python:
@@ -22,7 +22,6 @@ label wardrobe_import():
 
     $ the_wardrobe = wardrobe_from_xml(chosen_filename[:-4], in_import = True)
     $ mc.designed_wardrobe = mc.designed_wardrobe.merge_wardrobes(the_wardrobe, keep_primary_name = True)
-
 
     # Some file cleanup so they don't exist in memory for the rest of the game.
     $ list_of_xml_files = []

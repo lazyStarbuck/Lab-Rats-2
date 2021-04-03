@@ -9,26 +9,26 @@ init 0 python:
 
 label faq_loop:
     menu:
-        "Gameplay Basics.":
+        "Gameplay Basics":
             menu:
-                "Making Serum.":
-                    "Vren" "Making serum in your lab is the most important task for success in Lab Rats 2. You begin the game with a fully equipt lab."
-                    "Vren" "A serum design is made up of a number of serum traits. You decide what traits you want to include when you create a design."
-                    "Vren" "Serum traits modify the effects of a serum. The effects can be simple - increasing duration or Suggestion increase - or may be more complicated."
+                "Making Serum":
+                    "Vren" "Making serum in your lab is the most important task for success in Lab Rats 2. You begin the game with a fully equipped lab."
+                    "Vren" "The first step to make a serum is to design it in your lab. The most basic serum design can be made without any additions, but most will be made by adding serum traits."
+                    "Vren" "Serum traits modify the effects of a serum. The effects can be simple - increasing duration or Suggestion increase - or it may be much more complicated."
                     "Vren" "Each serum design has a limited number of trait slots. The number of slots can be increased by using more advanced serum production techniques."
                     "Vren" "Once you have decided on the traits you wish to include in your serum you will have to spend time in the lab researching it."
-                    "Vren" "Place the design in the research queue and spend a some time working in the lab."
+                    "Vren " "Place the design in the research queue and spend a few hours working in the lab."
                     "Vren" "More complicated serums will take more time to research. Once the serum is completely researched it can be produced by your production division."
                     "Vren" "Move to your production division and slot the new design into the current production queue."
                     "Vren" "Before you can produce the serum you will need raw supplies."
                     "Vren" "One unit of supply is needed for every production point the serum requires. You can order supply from your main office."
                     "Vren" "Once you have supplies you can spend time in your production lab. Serum is made in batches - unlocking larger batches will let you make more serum with the same amount of supply."
-                    "Vren" "You can kepp this serum for personal use or you can head to the main office and mark it for sale."
+                    "Vren" "You can keep this serum for personal use or you can head to the main office and mark it for sale."
                     "Vren" "Once a serum is marked for sale you can spend time in your marketing division to find a buyer."
                     "Vren" "Your research and development lab can also spend time researching new traits for serum instead of producing new serum designs."
 
-                "Hiring Staff.":
-                    "Vren" "While you can do all the necessary tasks for your company yourself, that isn't how you're going to make it big. Hiring employees will let you spend you grow your business and pull in more and more money."
+                "Hiring Staff":
+                    "Vren" "While you can do all the necessary tasks for your company yourself, that isn't how you're going to make it big. Hiring employees will allow you to grow your business and pull in more and more money."
                     "Vren" "To hire someone, head over to your main office. From there you can request a trio of resumes to choose from, for a small cost. The stats of the three candidates will be chosen, and you can choose who to hire."
                     "Vren" "The three primary stats - Charisma, Intelligence, and Focus - are the most important traits for a character. Each affects the jobs in your company differently."
                     "Vren" "Charisma is the primary stat for marketing and human resources, as well as being a secondary stat for purchasing supplies."
@@ -37,40 +37,44 @@ label faq_loop:
                     "Vren" "Each character will also have an expected salary, to be paid each day. Higher stats will result in a more expensive employee, so consider hiring specialists rather than generalists."
                     "Vren" "Your staff will come into work each morning and perform their appropriate tasks, freeing up your time for other pursuits..."
 
-                "Corrupting People.":
+                "Corrupting People":
                     "Vren" "You may be wondering what you can do with all this serum you produce. The main use of serum is to increase the Suggestibility statistic of another character."
                     "Vren" "While a character has a Suggestibility value of 0 nothing you do will have a long lasting effect on their personality. Suggestibility above 0 will allow you to slowly corrupt them."
                     "Vren" "Each girl has a Core Sluttiness value. This is the level of sluttiness they think is appropriate without any external influence. Core sluttiness looks like this: {image=gui/heart/gold_heart.png}"
                     "Vren" "They also have a Temporary Sluttiness value, which fluctuates up and down based on recent events. Temporary sluttiness looks like this: {image=gui/heart/red_heart.png}"
                     "Vren" "A girls Temporary Sluttiness will decrease if it is higher than her Core Sluttiness. If Suggestibility is higher than 0 there is a chance for the Temporary sluttiness to turn into Core sluttiness."
-                    "Vren" "Suggesibility has another use. It will increase the cap for Temporary sluttiness. Temporary sluttiness looks like this: {image=gui/heart/grey_heart.png}"
+                    "Vren" "Suggestibility has another use. It will increase the cap for Temporary sluttiness. Temporary sluttiness looks like this: {image=gui/heart/grey_heart.png}"
                     "Vren" "Interacting with a girl is the most direct way to change their Obedience or Sluttiness. There may also be random events that change their scores."
-                    "Vren" "Most actions have a minimum Temporary sluttiness rquirement before they can be attempted and a maximum Temporary sluttiness they will have an effect on."
-                    "Vren" "Having sex with a girl is nessesary to increase her sluttiness to the highest levels. Higher arousal will make a girl more willing to strip down or have sex."
+                    "Vren" "Most actions have a minimum Temporary sluttiness requirement before they can be attempted and a maximum Temporary sluttiness they will have an effect on."
+                    "Vren" "Having sex with a girl is necessary to increase her sluttiness to the highest levels. Higher arousal will make a girl more willing to strip down or have sex."
                     "Vren" "If you are able to make a girl cum she will immediately start to turn Temporary sluttiness into core sluttiness."
                     "Vren" "As a girls Sluttiness increases she will be more willing to wear revealing clothing or have sex with you."
-                    "Vren" "As her Obedience increase she will be more deferential. She may be willing to have sex simply because you ask, even if she is not normally slutty enough."
+                    "Vren" "As her Obedience increases she will be more deferential. She may be willing to have sex simply because you ask, even if she is not normally slutty enough."
 
-                "Leveling Up.":
-                    "Vren" "There are three main catagories of experience: Stats, Work Skills, and Sex Skills."
-                    "Vren" "For each of these catagories you will have a goal assigned. When that goal is completed you will recieve one point to spend on any of the scores in that catagory."
+                "Levelling Up":
+                    "Vren" "There are three main categories of experience: Stats, Work Skills, and Sex Skills."
+                    "Vren" "For each of these categories you will have a goal assigned. When that goal is completed you will receive one point to spend on any of the scores in that category."
                     "Vren" "Once per day you may also scrap a goal that is overly difficult or not possible to complete yet."
-                    "Vren" "When you complete a goal future goals in that catagory will increase in difficulty. Spend your early points wisely!"
+                    "Vren" "When you complete a goal future goals in that category will increase in difficulty. Spend your early points wisely!"
                     "Vren" "Some goals are only checked at the end of the day or end of a turn, so if you have a goal that should be completed but is not giving you the option try advancing time."
 
-        "Development Questions.":
+        "Development Questions":
             menu:
                 "Will there be more character poses?":
                     "Vren" "Absolutely! The current standing poses proved that the rendering workflow for the game is valid, which means I will be able to introduce character poses for different sex positions."
                     "Vren" "Most sex positions have character poses associated with them and new poses will be rendered with each update."
 
+                "Will there be animation?":
+                    "Vren" "No, there will not be full animation in the game. There may be small sprite based animations added later, but this will require more experimentation by me before I can commit to it."
+
                 "Why are their holes in some pieces of clothing?":
                     "Vren" "Some character positions cause portions of the character model to poke out of their clothing when I am rendering them."
-                    "Vren" "I will be adjusting my render settings and rerendering any clothing items that need it as we go forward."
+                    "Vren" "I will be adjusting my render settings and re-rendering any clothing items that need it as we go forward."
 
-        "Done.":
+        "Done":
             return
-    call faq_loop
+
+    jump faq_loop   # use jump instead of loop to prevent call stack nesting
     return
 
 label bedroom_masturbation(location_description = "home", edging_available = True, should_advance_time = True): #Baseline efficency for masturbating. Advances time, consumes energy, and releases Clarity inefficently.
